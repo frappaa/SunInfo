@@ -1,0 +1,4 @@
+<Modules>
+  <Module PersistentId="21884ED1-5E3E-4DBB-ADDD-0A19E620CB1A" ModuleId="SunInfo" />
+  <Module PersistentId="2EE7033A-8FEC-4E8C-9ABA-43E90F8A18B9" ModuleId="SunInfo.AstroAlgorithms" />
+</Modules>
