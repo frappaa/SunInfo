@@ -1,5 +1,0 @@
-C:\Users\Alberto\Documents\Visual Studio 2010\Projects\SunInfo\SunInfo.AstroAlgorithms\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Alberto\Documents\Visual Studio 2010\Projects\SunInfo\SunInfo.AstroAlgorithms\Bin\Debug\SunInfo.AstroAlgorithms.dll
-C:\Users\Alberto\Documents\Visual Studio 2010\Projects\SunInfo\SunInfo.AstroAlgorithms\Bin\Debug\SunInfo.AstroAlgorithms.pdb
-C:\Users\Alberto\Documents\Visual Studio 2010\Projects\SunInfo\SunInfo.AstroAlgorithms\obj\Debug\SunInfo.AstroAlgorithms.dll
-C:\Users\Alberto\Documents\Visual Studio 2010\Projects\SunInfo\SunInfo.AstroAlgorithms\obj\Debug\SunInfo.AstroAlgorithms.pdb
