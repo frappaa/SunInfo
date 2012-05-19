@@ -49,9 +49,11 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CartesianCoordinates.cs" />
     <Compile Include="Degree.cs" />
     <Compile Include="EquatorialCoordinates.cs" />
     <Compile Include="HorizontalCoordinates.cs" />
+    <Compile Include="PolarCoordinates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Radian.cs" />
     <Compile Include="SunInfoCalculator.cs" />

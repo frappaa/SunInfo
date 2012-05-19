@@ -2,7 +2,7 @@
 
 namespace SunInfo.AstroAlgorithms
 {
-    public class Utils
+    public static class Utils
     {
         public static string GetLatitudeString(Degree latitude)
         {

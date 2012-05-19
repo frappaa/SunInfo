@@ -21,6 +21,11 @@ namespace SunInfo.AstroAlgorithms
             return new Radian(radian1.Value - radian2.Value);
         }
 
+        public static Radian operator -(Radian radian)
+        {
+            return new Radian(-radian.Value);
+        }
+
         public double Value
         {
             get { return _radian; }

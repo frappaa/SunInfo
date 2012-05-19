@@ -39,16 +39,14 @@ namespace SunInfo
         {
             _currLatitude = new Degree(position.Location.Latitude);
             _currLongitude = new Degree(position.Location.Longitude);
-            textBlockLat.Text = string.Format("Latitude: {0}", Utils.GetLatitudeString(_currLatitude));
-            textBlockLon.Text = string.Format("Longitude: {0}", Utils.GetLongitudeString(_currLongitude));
         }
 
         void OnTimerEvent(object o)
         {
-            Deployment.Current.Dispatcher.BeginInvoke(RefreshNonLocationInfo);
+            Deployment.Current.Dispatcher.BeginInvoke(RefreshInfo);
         }
 
-        void RefreshNonLocationInfo()
+        void RefreshInfo()
         {
             DateTime utcDateTime = DateTime.UtcNow;
             var sunInfoCalculator = new SunInfoCalculator(utcDateTime);
@@ -63,7 +61,11 @@ namespace SunInfo
             Radian declination = sunInfoCalculator.Declination;
             textBlockDec.Text = string.Format("Declination: {0}", declination.ToDegree());
             textBlockAngularDiameter.Text = string.Format("Angular diameter: {0}", sunInfoCalculator.AngularDiameter.ToDegree());
-            var horizontalCoordinates = new EquatorialCoordinates(rightAscension, declination).ToHorizontalCoordinates(_currLatitude.ToRadian());
+
+            textBlockLat.Text = string.Format("Latitude: {0}", Utils.GetLatitudeString(_currLatitude));
+            textBlockLon.Text = string.Format("Longitude: {0}", Utils.GetLongitudeString(_currLongitude));
+
+            var horizontalCoordinates = new EquatorialCoordinates(rightAscension, declination).ToHorizontalCoordinates(_currLatitude.ToRadian(), _currLongitude.ToRadian(), sunInfoCalculator.DaysFrom2000);
             
             textBlockAz.Text = string.Format("Azimuth: {0}", horizontalCoordinates.Azimuth.ToDegree());
             textBlockAlt.Text = string.Format("Altitude: {0}", horizontalCoordinates.Altitude.ToDegree());
