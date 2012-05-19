@@ -23,23 +23,23 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="Sun Info" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Coordinates" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="PageTitle" Text="Position" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <TextBlock Name="textBlockLat" Text="Latitude:"/>
-                <TextBlock Name="textBlockLon" Text="Longitude:" />
-                <TextBlock Name="textBlockJD" Text="Julian Date:" />
+                <TextBlock Name="textBlockJD" Visibility="Collapsed" Text="Julian Date:" />
                 <!--<Button Content="Refresh" Height="72" HorizontalAlignment="Center" Name="buttonRefresh" VerticalAlignment="Bottom" Width="160" Click="OnButtonRefreshClick" />-->
                 <TextBlock Name="textBlockUTC" Text="UTC:" />
                 <TextBlock Name="textBlockSunEarthDistAU" Text="Sun-Earth distance (AU):" />
                 <TextBlock Name="textBlockSunEarthDistKm" Text="Sun-Earth distance (Km):" />
+                <TextBlock Name="textBlockAngularDiameter" Text="Angular diameter:" />
+                <TextBlock Name="textBlockAxialTilt" Text="Axial Tilt:" />
                 <TextBlock Name="textBlockRA" Text="Right Ascension:" />
                 <TextBlock Name="textBlockDec" Text="Declination:" />
-                <TextBlock Name="textBlockAxialTilt" Text="Axial Tilt:" />
-                <TextBlock Name="textBlockAngularDiameter" Text="Angular diameter:" />
+                <TextBlock Name="textBlockLat" Text="Latitude:"/>
+                <TextBlock Name="textBlockLon" Text="Longitude:" />
             </StackPanel>
         </Grid>
     </Grid>
