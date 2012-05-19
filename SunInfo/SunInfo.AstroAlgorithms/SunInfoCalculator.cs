@@ -31,6 +31,16 @@ namespace SunInfo.AstroAlgorithms
             get { return _julianDate - 2451545.0; }
         }
 
+        public Radian GreenwichSiderealTime
+        {
+            get { return new Degree(TimeSpan.FromHours((18.697374558 + 24.06570982441908 * DaysFrom2000) % 24)).ToRadian(); }
+        }
+
+        public Radian HourAngle(Radian longitude)
+        {
+            return GreenwichSiderealTime - (-longitude) - RightAscension;
+        }
+
         public double Jears10000From2000
         {
             get { return (DaysFrom2000 / 365.25) / 10000; }
@@ -103,9 +113,9 @@ namespace SunInfo.AstroAlgorithms
             get { return new Radian(Math.Asin(Math.Sin(AxialTilt.ToRadian().Value) * Math.Sin(EclipticSunLongitude.ToRadian().Value))); }
         }
 
-        public HorizontalCoordinates HorizontalCoordinates(Radian latitude, Radian longitude)
-        {
-            return new EquatorialCoordinates(RightAscension, Declination).ToHorizontalCoordinates(latitude, longitude, DaysFrom2000);
-        }
+        //public HorizontalCoordinates HorizontalCoordinates(Radian latitude, Radian longitude)
+        //{
+        //    return new EquatorialCoordinates(RightAscension, Declination).ToHorizontalCoordinates(latitude, longitude, DaysFrom2000);
+        //}
     }
 }

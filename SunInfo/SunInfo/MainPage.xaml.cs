@@ -52,23 +52,26 @@ namespace SunInfo
             var sunInfoCalculator = new SunInfoCalculator(utcDateTime);
             textBlockJD.Text = string.Format("Julian Date: {0}", sunInfoCalculator.JulianDate.ToString("0.00000"));
             textBlockUTC.Text = string.Format("UTC: {0}", utcDateTime);
-            textBlockSunEarthDistAU.Text = string.Format("Sun-Earth distance (AU): {0}", sunInfoCalculator.SunEarthDistance.ToString("0.00000000"));
-            textBlockSunEarthDistKm.Text = string.Format("Sun-Earth distance (Km): {0}", sunInfoCalculator.SunEarthDistanceKm.ToString("### ### ##0"));
+            textBlockSunEarthDistAU.Text = string.Format("Sun-Earth Distance (AU): {0}", sunInfoCalculator.SunEarthDistance.ToString("0.00000000"));
+            textBlockSunEarthDistKm.Text = string.Format("Sun-Earth Distance (Km): {0}", sunInfoCalculator.SunEarthDistanceKm.ToString("### ### ##0"));
             textBlockAxialTilt.Text = string.Format("Axial Tilt: {0}", sunInfoCalculator.AxialTilt);
             Radian rightAscension = sunInfoCalculator.RightAscension;
             TimeSpan rightAscensionTimeSpan = rightAscension.ToDegree().ToTimeSpan();
             textBlockRA.Text = string.Format("Right Ascension: {0}h {1}m {2}s", rightAscensionTimeSpan.Hours, rightAscensionTimeSpan.Minutes, rightAscensionTimeSpan.Seconds);
             Radian declination = sunInfoCalculator.Declination;
             textBlockDec.Text = string.Format("Declination: {0}", declination.ToDegree());
-            textBlockAngularDiameter.Text = string.Format("Angular diameter: {0}", sunInfoCalculator.AngularDiameter.ToDegree());
+            textBlockAngularDiameter.Text = string.Format("Angular Diameter: {0}", sunInfoCalculator.AngularDiameter.ToDegree());
 
             textBlockLat.Text = string.Format("Latitude: {0}", Utils.GetLatitudeString(_currLatitude));
             textBlockLon.Text = string.Format("Longitude: {0}", Utils.GetLongitudeString(_currLongitude));
 
-            var horizontalCoordinates = new EquatorialCoordinates(rightAscension, declination).ToHorizontalCoordinates(_currLatitude.ToRadian(), _currLongitude.ToRadian(), sunInfoCalculator.DaysFrom2000);
-            
+            var horizontalCoordinates = new EquatorialCoordinates(rightAscension, declination).ToHorizontalCoordinates(_currLatitude.ToRadian(), _currLongitude.ToRadian(), utcDateTime);
+            var hourAngleTimeSpan = sunInfoCalculator.HourAngle(_currLongitude.ToRadian()).ToDegree().ToTimeSpan();
+            textBlockHourAngle.Text = string.Format("Hour Angle: {0}h {1}m {2}s", hourAngleTimeSpan.Hours, hourAngleTimeSpan.Minutes, hourAngleTimeSpan.Seconds);
             textBlockAz.Text = string.Format("Azimuth: {0}", horizontalCoordinates.Azimuth.ToDegree());
             textBlockAlt.Text = string.Format("Altitude: {0}", horizontalCoordinates.Altitude.ToDegree());
+            double shadowRatio = Utils.GetShadowRatio(horizontalCoordinates.Altitude.ToDegree());
+            textBlockShadowRatio.Text = string.Format("Shadow Ratio: {0}", double.IsNaN(shadowRatio) ? "-" : shadowRatio.ToString("0.000"));
         }
 
         private void OnButtonRefreshClick(object sender, RoutedEventArgs e)

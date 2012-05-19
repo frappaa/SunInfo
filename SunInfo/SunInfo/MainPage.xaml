@@ -32,16 +32,18 @@
                 <TextBlock Name="textBlockJD" Visibility="Collapsed" Text="Julian Date:" />
                 <!--<Button Content="Refresh" Height="72" HorizontalAlignment="Center" Name="buttonRefresh" VerticalAlignment="Bottom" Width="160" Click="OnButtonRefreshClick" />-->
                 <TextBlock Name="textBlockUTC" Text="UTC:" />
-                <TextBlock Name="textBlockSunEarthDistAU" Text="Sun-Earth distance (AU):" />
-                <TextBlock Name="textBlockSunEarthDistKm" Text="Sun-Earth distance (Km):" />
-                <TextBlock Name="textBlockAngularDiameter" Text="Angular diameter:" />
+                <TextBlock Name="textBlockSunEarthDistAU" Text="Sun-Earth Distance (AU):" />
+                <TextBlock Name="textBlockSunEarthDistKm" Text="Sun-Earth Distance (Km):" />
+                <TextBlock Name="textBlockAngularDiameter" Text="Angular Diameter:" />
                 <TextBlock Name="textBlockAxialTilt" Text="Axial Tilt:" />
                 <TextBlock Name="textBlockRA" Text="Right Ascension:" />
                 <TextBlock Name="textBlockDec" Text="Declination:" />
                 <TextBlock Name="textBlockLat" Text="Latitude:"/>
                 <TextBlock Name="textBlockLon" Text="Longitude:" />
+                <TextBlock Name="textBlockHourAngle" Text="Hour Angle:" />
                 <TextBlock Name="textBlockAz" Text="Azimuth:" />
                 <TextBlock Name="textBlockAlt" Text="Altitude:" />
+                <TextBlock Name="textBlockShadowRatio" Text="Shadow Ratio:" />
 
             </StackPanel>
         </Grid>

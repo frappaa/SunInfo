@@ -16,6 +16,16 @@ namespace SunInfo.AstroAlgorithms
             return String.Format("{0}° {1}' {2}\" {3}", longitude.Degrees.ToString("00"), longitude.Minutes.ToString("00"), longitude.Seconds.ToString("00"), emisphere);
         }
 
+        public static double GetShadowRatio(Degree altitude)
+        {
+            var complementAngle = (new Degree(90) - altitude);
+            if ((complementAngle.Value < 0) || (complementAngle.Value > 90))
+            {
+                return double.NaN;
+            }
+            return Math.Tan(complementAngle.ToRadian().Value);
+        }
+
         //public static void ToDegreesMinutesSeconds(double degreesWithDecimals, out short degrees, out short minutes, out double seconds)
         //{
         //    var latlongAbs = Math.Abs(degreesWithDecimals);
