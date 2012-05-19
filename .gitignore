@@ -4,3 +4,8 @@ obj
 
 # mstest test results
 TestResults
+/SunInfo/_ReSharper.SunInfo
+/SunInfo/SunInfo/obj
+/SunInfo/SunInfo/Bin
+/SunInfo/SunInfo.AstroAlgorithms/obj
+/SunInfo/SunInfo.AstroAlgorithms/Bin
