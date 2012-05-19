@@ -40,6 +40,9 @@
                 <TextBlock Name="textBlockDec" Text="Declination:" />
                 <TextBlock Name="textBlockLat" Text="Latitude:"/>
                 <TextBlock Name="textBlockLon" Text="Longitude:" />
+                <TextBlock Name="textBlockAz" Text="Azimuth:" />
+                <TextBlock Name="textBlockAlt" Text="Altitude:" />
+
             </StackPanel>
         </Grid>
     </Grid>

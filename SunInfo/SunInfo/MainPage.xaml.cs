@@ -12,6 +12,9 @@ namespace SunInfo
         GeoCoordinateWatcher _watcher;
         private Timer _timer;
 
+        private Degree _currLatitude = new Degree(0);
+        private Degree _currLongitude = new Degree(0);
+
         // Constructor
         public MainPage()
         {
@@ -34,8 +37,10 @@ namespace SunInfo
 
         void RefreshPosition(GeoPosition<GeoCoordinate> position)
         {
-            textBlockLat.Text = string.Format("Latitude: {0}", Utils.GetLatitudeString(new Degree(position.Location.Latitude)));
-            textBlockLon.Text = string.Format("Longitude: {0}", Utils.GetLongitudeString(new Degree(position.Location.Longitude)));
+            _currLatitude = new Degree(position.Location.Latitude);
+            _currLongitude = new Degree(position.Location.Longitude);
+            textBlockLat.Text = string.Format("Latitude: {0}", Utils.GetLatitudeString(_currLatitude));
+            textBlockLon.Text = string.Format("Longitude: {0}", Utils.GetLongitudeString(_currLongitude));
         }
 
         void OnTimerEvent(object o)
@@ -52,10 +57,16 @@ namespace SunInfo
             textBlockSunEarthDistAU.Text = string.Format("Sun-Earth distance (AU): {0}", sunInfoCalculator.SunEarthDistance.ToString("0.00000000"));
             textBlockSunEarthDistKm.Text = string.Format("Sun-Earth distance (Km): {0}", sunInfoCalculator.SunEarthDistanceKm.ToString("### ### ##0"));
             textBlockAxialTilt.Text = string.Format("Axial Tilt: {0}", sunInfoCalculator.AxialTilt);
-            TimeSpan rightAscension = sunInfoCalculator.RightAscension.ToDegree().ToTimeSpan();
-            textBlockRA.Text = string.Format("Right Ascension: {0}h {1}m {2}s", rightAscension.Hours, rightAscension.Minutes, rightAscension.Seconds);
-            textBlockDec.Text = string.Format("Declination: {0}", sunInfoCalculator.Declination.ToDegree());
+            Radian rightAscension = sunInfoCalculator.RightAscension;
+            TimeSpan rightAscensionTimeSpan = rightAscension.ToDegree().ToTimeSpan();
+            textBlockRA.Text = string.Format("Right Ascension: {0}h {1}m {2}s", rightAscensionTimeSpan.Hours, rightAscensionTimeSpan.Minutes, rightAscensionTimeSpan.Seconds);
+            Radian declination = sunInfoCalculator.Declination;
+            textBlockDec.Text = string.Format("Declination: {0}", declination.ToDegree());
             textBlockAngularDiameter.Text = string.Format("Angular diameter: {0}", sunInfoCalculator.AngularDiameter.ToDegree());
+            var horizontalCoordinates = new EquatorialCoordinates(rightAscension, declination).ToHorizontalCoordinates(_currLatitude.ToRadian());
+            
+            textBlockAz.Text = string.Format("Azimuth: {0}", horizontalCoordinates.Azimuth.ToDegree());
+            textBlockAlt.Text = string.Format("Altitude: {0}", horizontalCoordinates.Altitude.ToDegree());
         }
 
         private void OnButtonRefreshClick(object sender, RoutedEventArgs e)

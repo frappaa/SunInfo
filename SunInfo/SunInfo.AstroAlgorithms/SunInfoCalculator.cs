@@ -102,5 +102,10 @@ namespace SunInfo.AstroAlgorithms
         {
             get { return new Radian(Math.Asin(Math.Sin(AxialTilt.ToRadian().Value) * Math.Sin(EclipticSunLongitude.ToRadian().Value))); }
         }
+
+        public HorizontalCoordinates HorizontalCoordinates(Radian latitude)
+        {
+            return new EquatorialCoordinates(RightAscension, Declination).ToHorizontalCoordinates(latitude);
+        }
     }
 }
