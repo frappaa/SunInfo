@@ -38,7 +38,12 @@ namespace SunInfo.AstroAlgorithms
 
         public Radian HourAngle(Radian longitude)
         {
-            return GreenwichSiderealTime - (-longitude) - RightAscension;
+            var hourAngle = GreenwichSiderealTime - (-longitude) - RightAscension;
+            if (hourAngle.Value < 0)
+            {
+                hourAngle = new Degree(TimeSpan.FromHours(24.0)).ToRadian() + hourAngle;
+            }
+            return hourAngle;
         }
 
         public double Jears10000From2000
@@ -53,7 +58,7 @@ namespace SunInfo.AstroAlgorithms
 
         private Degree EclipticSunLongitude
         {
-            get { return MeanSunLongitude + new Degree(1.915) * Math.Sin(MeanSunAnomaly.ToRadian().Value) + new Degree(.020) * Math.Sin(2*MeanSunAnomaly.ToRadian().Value); }
+            get { return MeanSunLongitude + new Degree(1.915) * Math.Sin(MeanSunAnomaly.ToRadian().Value) + new Degree(.020) * Math.Sin( 2.0 * MeanSunAnomaly.ToRadian().Value); }
         }
 
         private Degree MeanSunAnomaly

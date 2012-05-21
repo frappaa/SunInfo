@@ -19,13 +19,13 @@ namespace SunInfo
         public MainPage()
         {
             InitializeComponent();
-            _timer = new Timer(OnTimerEvent, null, 0, 1000);
+            _timer = new Timer(OnTimerEvent, null, 0, 250);
             StartLocationService();
         }
 
         private void StartLocationService()
         {
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) {MovementThreshold = 500};
+            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) {MovementThreshold = 50};
             _watcher.PositionChanged += OnPositionChanged;
             _watcher.Start();
         }

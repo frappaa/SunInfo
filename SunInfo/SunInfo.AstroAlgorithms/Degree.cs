@@ -8,7 +8,7 @@ namespace SunInfo.AstroAlgorithms
 
         public Degree(TimeSpan timespan)
         {
-            _degree = (timespan.Hours + timespan.Minutes/60.0 + timespan.Seconds/3600.0 + timespan.Milliseconds/3600000.0) / 24.0 * 360;
+            _degree = (timespan.Hours + timespan.Minutes / 60.0 + timespan.Seconds / 3600.0 + timespan.Milliseconds / 3600000.0) / 24.0 * 360;
         }
 
         public Degree(double degree)
@@ -73,7 +73,12 @@ namespace SunInfo.AstroAlgorithms
 
         public TimeSpan ToTimeSpan()
         {
-            double hours = _degree * 24.0 / 360.0;
+            var deg = (_degree % 360.0);
+            if (deg < 0)
+            {
+                deg += 360.0;
+            }
+            double hours = deg * 24.0 / 360.0;
             double minutes = (hours - (int) hours) * (100.0 * (60.0 / 100.0));
             double seconds = (minutes - (int) minutes) * (100.0 * (60.0 / 100.0));
             return new TimeSpan(0, (int)hours, (int)minutes, (int)seconds, (int) ((seconds - (int)seconds) * 1000.0));

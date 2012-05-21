@@ -25,18 +25,22 @@ namespace SunInfo.AstroAlgorithms
 
         public HorizontalCoordinates ToHorizontalCoordinates(Radian latitude, Radian longitude, DateTime utcTime)
         {
-            var hourHangle = new SunInfoCalculator(utcTime).HourAngle(longitude);
+            var hourAngle = new SunInfoCalculator(utcTime).HourAngle(longitude);
 
             double rightSide1 = Math.Sin(latitude.Value) * Math.Sin(Declination.Value) +
-                                Math.Cos(latitude.Value) * Math.Cos(Declination.Value) * Math.Cos(hourHangle.Value);
+                                Math.Cos(latitude.Value) * Math.Cos(Declination.Value) * Math.Cos(hourAngle.Value);
 
             double rightSide2 = Math.Cos(latitude.Value) * Math.Sin(Declination.Value) -
-                                Math.Sin(latitude.Value) * Math.Cos(Declination.Value) * Math.Cos(hourHangle.Value);
+                                Math.Sin(latitude.Value) * Math.Cos(Declination.Value) * Math.Cos(hourAngle.Value);
 
-            double rightSide3 = -Math.Cos(latitude.Value) * Math.Sin(hourHangle.Value);
+            double rightSide3 = -Math.Cos(Declination.Value) * Math.Sin(hourAngle.Value);
 
             PolarCoordinates polarCoordinates = new CartesianCoordinates(rightSide2, rightSide3).ToPolarCoordinates();
             var azimuth = polarCoordinates.Angle;
+            if (azimuth.Value < 0)
+            {
+                azimuth = new Degree(360.0).ToRadian() - (-azimuth);
+            }
 
             polarCoordinates = new CartesianCoordinates(polarCoordinates.Radius, rightSide1).ToPolarCoordinates();
             var altitude = polarCoordinates.Angle;
