@@ -4,35 +4,64 @@ using System.Threading;
 using System.Windows;
 using Microsoft.Phone.Controls;
 using SunInfo.AstroAlgorithms;
+using Microsoft.Devices.Sensors;
 
 namespace SunInfo
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        GeoCoordinateWatcher _watcher;
+        private GeoCoordinateWatcher _watcher;
         private Timer _timer;
+        private readonly Motion _motion;
 
         private Degree _currLatitude = new Degree(0);
         private Degree _currLongitude = new Degree(0);
+
+        private Degree _yaw = new Degree(0);
+        private Degree _pitch = new Degree(0);
+        private Degree _roll = new Degree(0);
 
         // Constructor
         public MainPage()
         {
             InitializeComponent();
             _timer = new Timer(OnTimerEvent, null, 0, 250);
+            if (_motion == null && Motion.IsSupported)
+            {
+                _motion = new Motion();
+                _motion.TimeBetweenUpdates = TimeSpan.FromMilliseconds(200);
+                _motion.CurrentValueChanged += OnMotionCurrentValueChanged;
+            }
             StartLocationService();
+        }
+
+        private void OnMotionCurrentValueChanged(object sender, SensorReadingEventArgs<MotionReading> args)
+        {
+            Dispatcher.BeginInvoke(() => MotionCurrentValueChanged(args.SensorReading));
+        }
+
+        private void MotionCurrentValueChanged(MotionReading args)
+        {
+            if (!_motion.IsDataValid)
+            {
+                return;
+            }
+            _yaw = new Radian(args.Attitude.Yaw).ToDegree();
+            _pitch = new Radian(args.Attitude.Pitch).ToDegree();
+            _roll = new Radian(args.Attitude.Roll).ToDegree();
         }
 
         private void StartLocationService()
         {
-            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default) {MovementThreshold = 50};
+            _watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
+            _watcher.MovementThreshold = 50;
             _watcher.PositionChanged += OnPositionChanged;
             _watcher.Start();
         }
 
-        void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> e)
+        void OnPositionChanged(object sender, GeoPositionChangedEventArgs<GeoCoordinate> args)
         {
-            Deployment.Current.Dispatcher.BeginInvoke(() => RefreshPosition(e.Position));
+            Dispatcher.BeginInvoke(() => RefreshPosition(args.Position));
         }
 
         void RefreshPosition(GeoPosition<GeoCoordinate> position)
@@ -43,7 +72,7 @@ namespace SunInfo
 
         void OnTimerEvent(object o)
         {
-            Deployment.Current.Dispatcher.BeginInvoke(RefreshInfo);
+            Dispatcher.BeginInvoke(RefreshInfo);
         }
 
         void RefreshInfo()
@@ -79,6 +108,10 @@ namespace SunInfo
             textBlockTransit.Text = string.Format("Transit: {0}", solarTransit == null ? "-" : solarTransit.Value.ToLocalTime().ToString("HH:mm:ss"));
             DateTime? sunset = sunInfoCalculator.Sunset(_currLongitude, _currLatitude);
             textBlockSunset.Text = string.Format("Sunset: {0}", sunset == null ? "-" : sunset.Value.ToLocalTime().ToString("HH:mm:ss"));
+            
+            textBlockYaw.Text = string.Format("Yaw: {0}", _yaw);
+            textBlockPitch.Text = string.Format("Pitch: {0}", _pitch);
+            textBlockRoll.Text = string.Format("Roll: {0}", _roll);
         }
 
         private void OnButtonRefreshClick(object sender, RoutedEventArgs e)
