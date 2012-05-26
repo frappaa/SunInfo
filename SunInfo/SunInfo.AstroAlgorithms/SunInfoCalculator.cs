@@ -29,17 +29,17 @@ namespace SunInfo.AstroAlgorithms
 
         public Radian AngularDiameter
         {
-            get { return new Radian(2 * Math.Atan((0.5 * 1392000) / SunEarthDistanceKm)); }
+            get { return new Radian(2.0 * Math.Atan((0.5 * 1392000.0) / SunEarthDistanceKm)); }
         }
 
-        public double DaysFrom2000
+        private double DaysFrom2000
         {
             get { return _julianDate - 2451545.0009; }
         }
 
-        public Radian GreenwichSiderealTime
+        private Radian GreenwichSiderealTime
         {
-            get { return new Degree(TimeSpan.FromHours((18.697374558 + 24.06570982441908 * DaysFrom2000) % 24)).ToRadian(); }
+            get { return new Degree(TimeSpan.FromHours((18.697374558 + 24.06570982441908 * DaysFrom2000) % 24.0)).ToRadian(); }
         }
 
         public Radian HourAngle(Radian longitude)
@@ -52,9 +52,20 @@ namespace SunInfo.AstroAlgorithms
             return hourAngle;
         }
 
-        public double Jears10000From2000
+        public Radian HourAngle(Degree longitude, Degree latitude)
         {
-            get { return (DaysFrom2000 / 365.25) / 10000; }
+            return new Radian(
+                Math.Acos(
+                (Math.Sin(new Degree(-.83).ToRadian().Value) - Math.Sin(latitude.ToRadian().Value) * Math.Sin(Declination.Value))
+                /
+                (Math.Cos(latitude.ToRadian().Value) * Math.Cos(Declination.Value))
+                )
+                );
+        }
+
+        private double Jears10000From2000
+        {
+            get { return (DaysFrom2000 / 365.25) / 10000.0; }
         }
 
         private Degree MeanSunLongitude
@@ -67,7 +78,7 @@ namespace SunInfo.AstroAlgorithms
             get
             {
                 double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
-                return MeanSunLongitude + new Degree(1.915 * Math.Sin(meanSunAnomaly) + .020 * Math.Sin( 2.0 * meanSunAnomaly));
+                return MeanSunLongitude + new Degree(1.9148 * Math.Sin(meanSunAnomaly) + .02 * Math.Sin( 2.0 * meanSunAnomaly));
             }
         }
 
@@ -81,24 +92,54 @@ namespace SunInfo.AstroAlgorithms
             get
             {
                 double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
-                return new Degree(1.9148 * Math.Sin(meanSunAnomaly) + .02 * Math.Sin(2 * meanSunAnomaly) + .0003 * Math.Sin(3 * meanSunAnomaly));
+                return new Degree(1.9148 * Math.Sin(meanSunAnomaly) + .02 * Math.Sin(2.0 * meanSunAnomaly) + .0003 * Math.Sin(3.0 * meanSunAnomaly));
             }
         }
 
-        public double JulianCycleSince2000(Degree longitude)
+        private double JulianCycleSince2000(Degree longitude)
         {
             return Math.Floor((DaysFrom2000 - (-longitude.Value / 360.0)) + 0.5);
         }
 
-        public double ApproximateSolarNoon(Degree longitude)
+        private double ApproximateSolarNoon(Degree longitude)
         {
-            return 2451545.0009 + (-longitude.Value/360.0) + JulianCycleSince2000(longitude);
+            return 2451545.0009 + (-longitude.Value / 360.0) + JulianCycleSince2000(longitude);
         }
 
-        public DateTime SolarTransit(Degree longitude)
+        private double SolarTransitJulianDate(Degree longitude)
         {
             double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
-            return TimeUtils.JulianDateToUtc(ApproximateSolarNoon(longitude) + .0053 * Math.Sin(meanSunAnomaly) - .0069 * Math.Sin(2 * EclipticSunLongitude.ToRadian().Value));
+            return ApproximateSolarNoon(longitude) + .0053 * Math.Sin(meanSunAnomaly) - .0069 * Math.Sin(2 * EclipticSunLongitude.ToRadian().Value);
+        }
+
+        public DateTime? SolarTransit(Degree longitude)
+        {
+            return TimeUtils.JulianDateToUtc(SolarTransitJulianDate(longitude));
+        }
+
+        private double SunsetJulianDate(Degree longitude, Degree latitude)
+        {
+            return 2451545.0009
+                + (HourAngle(longitude, latitude).ToDegree().Value + -longitude.Value) / 360.0
+                + JulianCycleSince2000(longitude)
+                + 0.0053 * Math.Sin(MeanSunAnomaly.ToRadian().Value)
+                - 0.0069 * Math.Sin(2 * EclipticSunLongitude.ToRadian().Value);
+        }
+
+        public DateTime? Sunset(Degree longitude, Degree latitude)
+        {
+            return TimeUtils.JulianDateToUtc(SunsetJulianDate(longitude, latitude));
+        }
+
+        private double SunriseJulianDate(Degree longitude, Degree latitude)
+        {
+            double solarTransitJulianDate = SolarTransitJulianDate(longitude);
+            return solarTransitJulianDate - (SunsetJulianDate(longitude, latitude) - solarTransitJulianDate);
+        }
+
+        public DateTime? Sunrise(Degree longitude, Degree latitude)
+        {
+            return TimeUtils.JulianDateToUtc(SunriseJulianDate(longitude, latitude));
         }
 
         public double JulianDate

@@ -73,7 +73,12 @@ namespace SunInfo
             textBlockAlt.Text = string.Format("Altitude: {0}", horizontalCoordinates.Altitude.ToDegree());
             double shadowRatio = Utils.GetShadowRatio(horizontalCoordinates.Altitude.ToDegree());
             textBlockShadowRatio.Text = string.Format("Shadow Ratio: {0}", double.IsNaN(shadowRatio) ? "-" : shadowRatio.ToString("0.000"));
-            textBlockTransit.Text = string.Format("Transit: {0}", sunInfoCalculator.SolarTransit(_currLongitude).ToLocalTime().ToString("HH:mm:ss"));
+            DateTime? sunrise = sunInfoCalculator.Sunrise(_currLongitude, _currLatitude);
+            textBlockSunrise.Text = string.Format("Sunrise: {0}", sunrise == null ? "-" : sunrise.Value.ToLocalTime().ToString("HH:mm:ss"));
+            DateTime? solarTransit = sunInfoCalculator.SolarTransit(_currLongitude);
+            textBlockTransit.Text = string.Format("Transit: {0}", solarTransit == null ? "-" : solarTransit.Value.ToLocalTime().ToString("HH:mm:ss"));
+            DateTime? sunset = sunInfoCalculator.Sunset(_currLongitude, _currLatitude);
+            textBlockSunset.Text = string.Format("Sunset: {0}", sunset == null ? "-" : sunset.Value.ToLocalTime().ToString("HH:mm:ss"));
         }
 
         private void OnButtonRefreshClick(object sender, RoutedEventArgs e)

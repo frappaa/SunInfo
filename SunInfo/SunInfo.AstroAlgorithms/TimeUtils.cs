@@ -18,15 +18,19 @@ namespace SunInfo.AstroAlgorithms
             double julianDay = day + (153 * month - 457) / 5 + 365 * year + (year / 4) - (year / 100) + (year / 400) + 1721119;
             var tsFromMidday = utcDateTime.TimeOfDay - new TimeSpan(12, 0, 0);
             double fract = Math.Abs((double)tsFromMidday.Hours) / 24.0 + (Math.Abs(tsFromMidday.Minutes) / (24.0 * 60.0)) + Math.Abs(tsFromMidday.Seconds / (24.0 * 60.0 * 60.0));
-            if (tsFromMidday.Hours < 0)
+            if (tsFromMidday.Ticks < 0)
             {
                 return julianDay - fract;
             }
             return julianDay + fract;
         }
 
-        public static DateTime JulianDateToUtc(double julianDate)
+        public static DateTime? JulianDateToUtc(double julianDate)
         {
+            if (double.IsNaN(julianDate))
+            {
+                return null;
+            }
             double jd = julianDate + .5 + 32044.0;
             double g = Math.Floor(jd / 146097.0);
             double dg = jd % 146097.0;

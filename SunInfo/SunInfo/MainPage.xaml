@@ -45,7 +45,9 @@
                 <TextBlock Name="textBlockAz" Text="Azimuth:" />
                 <TextBlock Name="textBlockAlt" Text="Altitude:" />
                 <TextBlock Name="textBlockShadowRatio" Text="Shadow Ratio:" />
+                <TextBlock Name="textBlockSunrise" Text="Sunrise:" />
                 <TextBlock Name="textBlockTransit" Text="Transit:" />
+                <TextBlock Name="textBlockSunset" Text="Sunset:" />
 
             </StackPanel>
         </Grid>
