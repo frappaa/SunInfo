@@ -6,14 +6,20 @@ namespace SunInfo.AstroAlgorithms
     {
         private readonly double _julianDate;
 
+        private Degree _axialTilt;
+
         public SunInfoCalculator(DateTime utcDateTime)
         {
-            _julianDate = CalculateJulianDate(utcDateTime);
+            _julianDate = TimeUtils.UtcToJulianDate(utcDateTime);
         }
 
         public double SunEarthDistance
         {
-            get { return 1.00014 - .01671 * Math.Cos(MeanSunAnomaly.ToRadian().Value) - .00014 * Math.Cos(2 * MeanSunAnomaly.ToRadian().Value); }
+            get
+            {
+                double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
+                return 1.00014 - .01671 * Math.Cos(meanSunAnomaly) - .00014 * Math.Cos(2 * meanSunAnomaly);
+            }
         }
 
         public double SunEarthDistanceKm
@@ -28,7 +34,7 @@ namespace SunInfo.AstroAlgorithms
 
         public double DaysFrom2000
         {
-            get { return _julianDate - 2451545.0; }
+            get { return _julianDate - 2451545.0009; }
         }
 
         public Radian GreenwichSiderealTime
@@ -53,37 +59,46 @@ namespace SunInfo.AstroAlgorithms
 
         private Degree MeanSunLongitude
         {
-            get { return new Degree(280.460) + new Degree(.9856474) * DaysFrom2000; }
+            get { return new Degree(280.460 + .9856474 * DaysFrom2000); }
         }
 
         private Degree EclipticSunLongitude
         {
-            get { return MeanSunLongitude + new Degree(1.915) * Math.Sin(MeanSunAnomaly.ToRadian().Value) + new Degree(.020) * Math.Sin( 2.0 * MeanSunAnomaly.ToRadian().Value); }
+            get
+            {
+                double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
+                return MeanSunLongitude + new Degree(1.915 * Math.Sin(meanSunAnomaly) + .020 * Math.Sin( 2.0 * meanSunAnomaly));
+            }
         }
 
         private Degree MeanSunAnomaly
         {
-            get { return new Degree(357.528) + new Degree(.9856003) * DaysFrom2000; }
+            get { return new Degree(357.5291 + .98560028 * DaysFrom2000); }
         }
 
-        private static double CalculateJulianDate(DateTime utcDateTime)
+        private Degree EquationOfCenter
         {
-            int month = utcDateTime.Month;
-            int day = utcDateTime.Day;
-            int year = utcDateTime.Year;
-            if (month < 3)
+            get
             {
-                month += 12;
-                year -= 1;
+                double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
+                return new Degree(1.9148 * Math.Sin(meanSunAnomaly) + .02 * Math.Sin(2 * meanSunAnomaly) + .0003 * Math.Sin(3 * meanSunAnomaly));
             }
-            double julianDay = day + (153 * month - 457) / 5 + 365 * year + (year / 4) - (year / 100) + (year / 400) + 1721119;
-            var tsFromMidday = utcDateTime.TimeOfDay - new TimeSpan(12, 0, 0);
-            double fract = Math.Abs(tsFromMidday.Hours) / 24.0 + (tsFromMidday.Minutes / (24.0 * 60.0)) + (tsFromMidday.Seconds / (24.0 * 60.0 * 60.0));
-            if (tsFromMidday.Hours < 0)
-            {
-                return julianDay - fract;
-            }
-            return julianDay + fract;
+        }
+
+        public double JulianCycleSince2000(Degree longitude)
+        {
+            return Math.Floor((DaysFrom2000 - (-longitude.Value / 360.0)) + 0.5);
+        }
+
+        public double ApproximateSolarNoon(Degree longitude)
+        {
+            return 2451545.0009 + (-longitude.Value/360.0) + JulianCycleSince2000(longitude);
+        }
+
+        public DateTime SolarTransit(Degree longitude)
+        {
+            double meanSunAnomaly = MeanSunAnomaly.ToRadian().Value;
+            return TimeUtils.JulianDateToUtc(ApproximateSolarNoon(longitude) + .0053 * Math.Sin(meanSunAnomaly) - .0069 * Math.Sin(2 * EclipticSunLongitude.ToRadian().Value));
         }
 
         public double JulianDate
@@ -93,18 +108,19 @@ namespace SunInfo.AstroAlgorithms
 
         public Degree AxialTilt
         {
-            //get { return new Degree(23.439) - new Degree(.0000004)*DaysFrom2000; }
-            get { return new Degree(23, 26, 21.448)
-                - new Degree(0,0,4680.93) * Jears10000From2000
-                - new Degree(0,0,1.55) * Math.Pow(Jears10000From2000, 2)
-                + new Degree(0,0,1999.25) * Math.Pow(Jears10000From2000, 3)
-                - new Degree(0,0,51.38) * Math.Pow(Jears10000From2000, 4)
-                - new Degree(0,0,249.67) * Math.Pow(Jears10000From2000, 5)
-                - new Degree(0,0,39.05) * Math.Pow(Jears10000From2000, 6)
-                + new Degree(0,0,7.12) * Math.Pow(Jears10000From2000, 7)
-                + new Degree(0,0,27.87) * Math.Pow(Jears10000From2000, 8)
-                + new Degree(0,0,5.79) * Math.Pow(Jears10000From2000, 9)
-                + new Degree(0,0,2.45) * Math.Pow(Jears10000From2000, 10);
+            get
+            {
+                return _axialTilt ?? (_axialTilt = new Degree(23, 26, 21.448)
+                                                   - new Degree(0, 0, 4680.93) * Jears10000From2000
+                                                   - new Degree(0, 0, 1.55) * Math.Pow(Jears10000From2000, 2)
+                                                   + new Degree(0, 0, 1999.25) * Math.Pow(Jears10000From2000, 3)
+                                                   - new Degree(0, 0, 51.38) * Math.Pow(Jears10000From2000, 4)
+                                                   - new Degree(0, 0, 249.67) * Math.Pow(Jears10000From2000, 5)
+                                                   - new Degree(0, 0, 39.05) * Math.Pow(Jears10000From2000, 6)
+                                                   + new Degree(0, 0, 7.12) * Math.Pow(Jears10000From2000, 7)
+                                                   + new Degree(0, 0, 27.87) * Math.Pow(Jears10000From2000, 8)
+                                                   + new Degree(0, 0, 5.79) * Math.Pow(Jears10000From2000, 9)
+                                                   + new Degree(0, 0, 2.45) * Math.Pow(Jears10000From2000, 10));
             }
         }
 

@@ -29,9 +29,10 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <TextBlock Name="textBlockJD" Visibility="Collapsed" Text="Julian Date:" />
+                <TextBlock Name="textBlockJD" Text="Julian Date:" />
                 <!--<Button Content="Refresh" Height="72" HorizontalAlignment="Center" Name="buttonRefresh" VerticalAlignment="Bottom" Width="160" Click="OnButtonRefreshClick" />-->
                 <TextBlock Name="textBlockUTC" Text="UTC:" />
+                <TextBlock Name="textBlockLocalTime" Text="Local Time:" />
                 <TextBlock Name="textBlockSunEarthDistAU" Text="Sun-Earth Distance (AU):" />
                 <TextBlock Name="textBlockSunEarthDistKm" Text="Sun-Earth Distance (Km):" />
                 <TextBlock Name="textBlockAngularDiameter" Text="Angular Diameter:" />
@@ -44,6 +45,7 @@
                 <TextBlock Name="textBlockAz" Text="Azimuth:" />
                 <TextBlock Name="textBlockAlt" Text="Altitude:" />
                 <TextBlock Name="textBlockShadowRatio" Text="Shadow Ratio:" />
+                <TextBlock Name="textBlockTransit" Text="Transit:" />
 
             </StackPanel>
         </Grid>

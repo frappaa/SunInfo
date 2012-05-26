@@ -52,6 +52,7 @@ namespace SunInfo
             var sunInfoCalculator = new SunInfoCalculator(utcDateTime);
             textBlockJD.Text = string.Format("Julian Date: {0}", sunInfoCalculator.JulianDate.ToString("0.00000"));
             textBlockUTC.Text = string.Format("UTC: {0}", utcDateTime);
+            textBlockLocalTime.Text = string.Format("Local Time: {0}", utcDateTime.ToLocalTime());
             textBlockSunEarthDistAU.Text = string.Format("Sun-Earth Distance (AU): {0}", sunInfoCalculator.SunEarthDistance.ToString("0.00000000"));
             textBlockSunEarthDistKm.Text = string.Format("Sun-Earth Distance (Km): {0}", sunInfoCalculator.SunEarthDistanceKm.ToString("### ### ##0"));
             textBlockAxialTilt.Text = string.Format("Axial Tilt: {0}", sunInfoCalculator.AxialTilt);
@@ -72,6 +73,7 @@ namespace SunInfo
             textBlockAlt.Text = string.Format("Altitude: {0}", horizontalCoordinates.Altitude.ToDegree());
             double shadowRatio = Utils.GetShadowRatio(horizontalCoordinates.Altitude.ToDegree());
             textBlockShadowRatio.Text = string.Format("Shadow Ratio: {0}", double.IsNaN(shadowRatio) ? "-" : shadowRatio.ToString("0.000"));
+            textBlockTransit.Text = string.Format("Transit: {0}", sunInfoCalculator.SolarTransit(_currLongitude).ToLocalTime().ToString("HH:mm:ss"));
         }
 
         private void OnButtonRefreshClick(object sender, RoutedEventArgs e)
