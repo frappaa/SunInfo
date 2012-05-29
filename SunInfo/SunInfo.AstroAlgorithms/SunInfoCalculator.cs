@@ -4,13 +4,23 @@ namespace SunInfo.AstroAlgorithms
 {
     public class SunInfoCalculator
     {
-        private readonly double _julianDate;
+        private double _julianDate;
 
         private Degree _axialTilt;
 
-        public SunInfoCalculator(DateTime utcDateTime)
+        public SunInfoCalculator(DateTime? utcDateTime = null)
+        {
+            if (utcDateTime == null)
+            {
+                utcDateTime = DateTime.UtcNow;
+            }
+            SetTime(utcDateTime.Value);
+        }
+
+        public void SetTime(DateTime utcDateTime)
         {
             _julianDate = TimeUtils.UtcToJulianDate(utcDateTime);
+            _axialTilt = null;
         }
 
         public double SunEarthDistance
@@ -52,7 +62,7 @@ namespace SunInfo.AstroAlgorithms
             return hourAngle;
         }
 
-        public Radian HourAngle(Degree longitude, Degree latitude)
+        private Radian HourAngle(Degree latitude)
         {
             return new Radian(
                 Math.Acos(
@@ -120,7 +130,7 @@ namespace SunInfo.AstroAlgorithms
         private double SunsetJulianDate(Degree longitude, Degree latitude)
         {
             return 2451545.0009
-                + (HourAngle(longitude, latitude).ToDegree().Value + -longitude.Value) / 360.0
+                + (HourAngle(latitude).ToDegree().Value + -longitude.Value) / 360.0
                 + JulianCycleSince2000(longitude)
                 + 0.0053 * Math.Sin(MeanSunAnomaly.ToRadian().Value)
                 - 0.0069 * Math.Sin(2 * EclipticSunLongitude.ToRadian().Value);
@@ -174,10 +184,5 @@ namespace SunInfo.AstroAlgorithms
         {
             get { return new Radian(Math.Asin(Math.Sin(AxialTilt.ToRadian().Value) * Math.Sin(EclipticSunLongitude.ToRadian().Value))); }
         }
-
-        //public HorizontalCoordinates HorizontalCoordinates(Radian latitude, Radian longitude)
-        //{
-        //    return new EquatorialCoordinates(RightAscension, Declination).ToHorizontalCoordinates(latitude, longitude, DaysFrom2000);
-        //}
     }
 }

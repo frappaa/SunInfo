@@ -6,7 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="696"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -28,9 +28,68 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="textBlocklblJD" Grid.Row="0" Grid.Column="0" Text="Julian Date:" Visibility="Collapsed"/>
+            <TextBlock Name="textBlockJD" Grid.Row="0" Grid.Column="1" Visibility="Collapsed"/>
+            <TextBlock Name="textBlocklblUTC" Grid.Row="1" Grid.Column="0" Text="UTC:" />
+            <TextBlock Name="textBlockUTC" Grid.Row="1" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLocalTime" Grid.Row="2" Grid.Column="0" Text="Local Time:" />
+            <TextBlock Name="textBlockLocalTime" Grid.Row="2" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunEarthDistAU" Grid.Row="3" Grid.Column="0" Text="Sun-Earth Distance (AU):" Visibility="Collapsed"/>
+            <TextBlock Name="textBlockSunEarthDistAU" Grid.Row="3" Grid.Column="1" Visibility="Collapsed"/>
+            <TextBlock Name="textBlocklblSunEarthDistKm" Grid.Row="4" Grid.Column="0" Text="Sun-Earth Distance (Km):" />
+            <TextBlock Name="textBlockSunEarthDistKm" Grid.Row="4" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAngularDiameter" Grid.Row="5" Grid.Column="0" Text="Angular Diameter:" />
+            <TextBlock Name="textBlockAngularDiameter" Grid.Row="5" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAxialTilt" Grid.Row="6" Grid.Column="0" Text="Axial Tilt:" />
+            <TextBlock Name="textBlockAxialTilt" Grid.Row="6" Grid.Column="1" />
+            <TextBlock Name="textBlocklblRA" Grid.Row="7" Grid.Column="0" Text="Right Ascension:" />
+            <TextBlock Name="textBlockRA" Grid.Row="7" Grid.Column="1" />
+            <TextBlock Name="textBlocklblDec" Grid.Row="8" Grid.Column="0" Text="Declination:" />
+            <TextBlock Name="textBlockDec" Grid.Row="8" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLat" Grid.Row="9" Grid.Column="0" Text="Latitude:" />
+            <TextBlock Name="textBlockLat" Grid.Row="9" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLon" Grid.Row="10" Grid.Column="0" Text="Latitude:" />
+            <TextBlock Name="textBlockLon" Grid.Row="10" Grid.Column="1" />
+            <TextBlock Name="textBlocklblHourAngle" Grid.Row="11" Grid.Column="0" Text="Hour Angle:" />
+            <TextBlock Name="textBlockHourAngle" Grid.Row="11" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAz" Grid.Row="12" Grid.Column="0" Text="Azimuth:" />
+            <TextBlock Name="textBlockAz" Grid.Row="12" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAlt" Grid.Row="13" Grid.Column="0" Text="Altitude:" />
+            <TextBlock Name="textBlockAlt" Grid.Row="13" Grid.Column="1" />
+            <TextBlock Name="textBlocklblShadowRatio" Grid.Row="14" Grid.Column="0" Text="Shadow Ratio:" />
+            <TextBlock Name="textBlockShadowRatio" Grid.Row="14" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunrise" Grid.Row="15" Grid.Column="0" Text="Sunrise:" />
+            <TextBlock Name="textBlockSunrise" Grid.Row="15" Grid.Column="1" />
+            <TextBlock Name="textBlocklblTransit" Grid.Row="16" Grid.Column="0" Text="Transit:" />
+            <TextBlock Name="textBlockTransit" Grid.Row="16" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunset" Grid.Row="17" Grid.Column="0" Text="Sunset:" />
+            <TextBlock Name="textBlockSunset" Grid.Row="17" Grid.Column="1" />
+            <!--<StackPanel>
                 <TextBlock Name="textBlockJD" Visibility="Collapsed" Text="Julian Date:" />
-                <!--<Button Content="Refresh" Height="72" HorizontalAlignment="Center" Name="buttonRefresh" VerticalAlignment="Bottom" Width="160" Click="OnButtonRefreshClick" />-->
                 <TextBlock Name="textBlockUTC" Text="UTC:" />
                 <TextBlock Name="textBlockLocalTime" Text="Local Time:" />
                 <TextBlock Name="textBlockSunEarthDistAU" Visibility="Collapsed" Text="Sun-Earth Distance (AU):" />
@@ -48,24 +107,22 @@
                 <TextBlock Name="textBlockSunrise" Text="Sunrise:" />
                 <TextBlock Name="textBlockTransit" Text="Transit:" />
                 <TextBlock Name="textBlockSunset" Text="Sunset:" />
-                <TextBlock Name="textBlockYaw" Text="Yaw:" />
-                <TextBlock Name="textBlockPitch" Text="Pitch:" />
-                <TextBlock Name="textBlockRoll" Text="Roll:" />
-
-            </StackPanel>
+            </StackPanel>-->
         </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
-    <!--<phone:PhoneApplicationPage.ApplicationBar>
+    <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <!--<shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>-->
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
-                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+                <shell:ApplicationBarMenuItem Text="Location"/>
+                <shell:ApplicationBarMenuItem Text="Time"/>
+                <shell:ApplicationBarMenuItem Text="Refresh rate"/>
+                <shell:ApplicationBarMenuItem Text="About"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
-    </phone:PhoneApplicationPage.ApplicationBar>-->
+    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>
