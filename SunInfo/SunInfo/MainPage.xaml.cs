@@ -16,6 +16,9 @@ namespace SunInfo
         private Degree _currLatitude = new Degree(0);
         private Degree _currLongitude = new Degree(0);
 
+        private DateTime _currUtcDateTime;
+        private SimulationStep _simulationStep;
+
         private readonly SunDataProvider _sunDataProvider = new SunDataProvider();
 
         public MainPage()
@@ -23,6 +26,8 @@ namespace SunInfo
             InitializeComponent();
             _timer = new Timer(OnTimerEvent, null, 0, 1000);
             StartLocationService();
+            _currUtcDateTime = DateTime.UtcNow;
+            _simulationStep = SimulationStep.SimulationStepNormal;
         }
 
         private void StartLocationService()
@@ -53,36 +58,56 @@ namespace SunInfo
         {
             textBlockLat.Text = Utils.GetLatitudeString(_currLatitude);
             textBlockLon.Text = Utils.GetLongitudeString(_currLongitude);
-
-            DateTime utcDateTime = DateTime.UtcNow;
-            var sunData = _sunDataProvider.Get(utcDateTime, _currLatitude, _currLongitude);
+            var sunData = _sunDataProvider.Get(_currUtcDateTime, _currLatitude, _currLongitude);
             FillUiItems(sunData);
+            _currUtcDateTime += _simulationStep.ToTimeSpan();
         }
 
         private void FillUiItems(SunData sunData)
         {
             textBlockJD.Text = sunData.JulianDate.ToString("0.00000");
             textBlockUTC.Text = sunData.UtcTime.ToString(CultureInfo.InvariantCulture);
-            textBlockLocalTime.Text = sunData.LocalTime.ToLocalTime().ToString(CultureInfo.InvariantCulture);
+            textBlockLocalTime.Text = sunData.LocalTime.ToString(CultureInfo.InvariantCulture);
             textBlockSunEarthDistAU.Text = sunData.SunEarthDistAU.ToString("0.00000000");
             textBlockSunEarthDistKm.Text = sunData.SunEarthDistKm.ToString("### ### ##0");
             textBlockAxialTilt.Text = sunData.AxialTilt.ToString();
-            TimeSpan rightAscension = sunData.RightAscension;
-            textBlockRA.Text = string.Format("{0}h {1}m {2}s", rightAscension.Hours, rightAscension.Minutes, rightAscension.Seconds);
+            textBlockRA.Text = string.Format("{0}h {1}m {2}s", sunData.RightAscension.Hours, sunData.RightAscension.Minutes, sunData.RightAscension.Seconds);
             textBlockDec.Text = sunData.Declination.ToString();
             textBlockAngularDiameter.Text = sunData.AngularDiameter.ToString();
-            var hourAngle = sunData.HourAngle;
-            textBlockHourAngle.Text = string.Format("{0}h {1}m {2}s", hourAngle.Hours, hourAngle.Minutes, hourAngle.Seconds);
+            textBlockHourAngle.Text = string.Format("{0}h {1}m {2}s", sunData.HourAngle.Hours, sunData.HourAngle.Minutes, sunData.HourAngle.Seconds);
             textBlockAz.Text = sunData.Azimuth.ToString();
             textBlockAlt.Text = sunData.Altitude.ToString();
-            double shadowRatio = sunData.ShadowRatio;
-            textBlockShadowRatio.Text = double.IsNaN(shadowRatio) ? "-" : shadowRatio.ToString("0.000");
+            textBlockShadowRatio.Text = double.IsNaN(sunData.ShadowRatio) ? "-" : sunData.ShadowRatio.ToString("0.000");
             DateTime? sunrise = sunData.Sunrise;
             textBlockSunrise.Text = sunrise == null ? "-" : sunrise.Value.ToLocalTime().ToString("HH:mm");
             DateTime? solarTransit = sunData.Transit;
             textBlockTransit.Text = solarTransit == null ? "-" : solarTransit.Value.ToLocalTime().ToString("HH:mm");
             DateTime? sunset = sunData.Sunset;
             textBlockSunset.Text = sunset == null ? "-" : sunset.Value.ToLocalTime().ToString("HH:mm");
+        }
+
+        private void OnRew(object sender, EventArgs e)
+        {
+            _simulationStep.Rew();
+            RefreshInfo();
+        }
+
+        private void OnNormal(object sender, EventArgs e)
+        {
+            _simulationStep = SimulationStep.SimulationStepNormal;
+            RefreshInfo();
+        }
+
+        private void OnNow(object sender, EventArgs e)
+        {
+            _currUtcDateTime = DateTime.UtcNow;
+            RefreshInfo();
+        }
+
+        private void OnFf(object sender, EventArgs e)
+        {
+            _simulationStep.Ff();
+            RefreshInfo();
         }
     }
 }

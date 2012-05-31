@@ -88,34 +88,16 @@
             <TextBlock Name="textBlockTransit" Grid.Row="16" Grid.Column="1" />
             <TextBlock Name="textBlocklblSunset" Grid.Row="17" Grid.Column="0" Text="Sunset:" />
             <TextBlock Name="textBlockSunset" Grid.Row="17" Grid.Column="1" />
-            <!--<StackPanel>
-                <TextBlock Name="textBlockJD" Visibility="Collapsed" Text="Julian Date:" />
-                <TextBlock Name="textBlockUTC" Text="UTC:" />
-                <TextBlock Name="textBlockLocalTime" Text="Local Time:" />
-                <TextBlock Name="textBlockSunEarthDistAU" Visibility="Collapsed" Text="Sun-Earth Distance (AU):" />
-                <TextBlock Name="textBlockSunEarthDistKm" Text="Sun-Earth Distance (Km):" />
-                <TextBlock Name="textBlockAngularDiameter" Text="Angular Diameter:" />
-                <TextBlock Name="textBlockAxialTilt" Text="Axial Tilt:" />
-                <TextBlock Name="textBlockRA" Text="Right Ascension:" />
-                <TextBlock Name="textBlockDec" Text="Declination:" />
-                <TextBlock Name="textBlockLat" Text="Latitude:"/>
-                <TextBlock Name="textBlockLon" Text="Longitude:" />
-                <TextBlock Name="textBlockHourAngle" Text="Hour Angle:" />
-                <TextBlock Name="textBlockAz" Text="Azimuth:" />
-                <TextBlock Name="textBlockAlt" Text="Altitude:" />
-                <TextBlock Name="textBlockShadowRatio" Text="Shadow Ratio:" />
-                <TextBlock Name="textBlockSunrise" Text="Sunrise:" />
-                <TextBlock Name="textBlockTransit" Text="Transit:" />
-                <TextBlock Name="textBlockSunset" Text="Sunset:" />
-            </StackPanel>-->
         </Grid>
     </Grid>
  
     <!--Sample code showing usage of ApplicationBar-->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <!--<shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>-->
+            <shell:ApplicationBarIconButton Click="OnRew" IconUri="/Images/appbar.transport.rew.rest.png" Text="Decrease speed"/>
+            <shell:ApplicationBarIconButton Click="OnNormal" IconUri="/Images/appbar.transport.play.rest.png" Text="Normal speed"/>
+            <shell:ApplicationBarIconButton Click="OnNow" IconUri="/Images/appbar.download.rest.png" Text="Now"/>
+            <shell:ApplicationBarIconButton Click="OnFf" IconUri="/Images/appbar.transport.ff.rest.png" Text="Increase speed"/>
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="Location"/>
                 <shell:ApplicationBarMenuItem Text="Time"/>

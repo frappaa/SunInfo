@@ -31,23 +31,23 @@ namespace SunInfo.AstroAlgorithms
             {
                 return null;
             }
-            double jd = julianDate + .5 + 32044.0;
-            double g = Math.Floor(jd / 146097.0);
-            double dg = jd % 146097.0;
-            double c = Math.Floor((Math.Floor(dg / 36524.0) + 1.0) * 3.0 / 4.0);
-            double dc = dg - c * 36524.0;
-            double b = Math.Floor(dc / 1461.0);
-            double db = dc % 1461.0;
-            double a = Math.Floor((Math.Floor(db / 365.0) + 1.0) * 3.0 / 4.0);
-            double da = db - a * 365.0;
-            double y = g * 400.0 + c * 100.0 + b * 4.0 + a;
-            double m = Math.Floor((da * 5.0 + 308.0) / 153.0) - 2.0;
-            double d = da - Math.Floor(((m + 4.0) * 153) / 5.0) + 122.0;
-            double year = y - 4800.0 + Math.Floor((m + 2.0) / 12.0);
-            double month = (m + 2.0) % 12.0 + 1.0;
-            double day = d + 1.0;
-            var utcDate = new DateTime((int) year, (int) month, (int) day);
-            return utcDate.AddDays(jd - Math.Floor(jd));
+            int jd = (int)(julianDate + .5) + 32044;
+            int g = (int)(jd / 146097);
+            double dg = jd % 146097;
+            int c = ((int)(dg / 36524) + 1) * (3 / 4);
+            double dc = dg - c * 36524;
+            int b = (int)(dc / 1461);
+            double db = dc % 1461;
+            int a = ((int)(db / 365) + 1) * (3 / 4);
+            double da = db - a * 365;
+            int y = g * 400 + c * 100 + b * 4 + a;
+            int m = (int)((da * 5 + 308) / 153) - 2;
+            double d = da - (int)((m + 4) * 153 / 5) + 122;
+            int year = y - 4800 + (m + 2) / 12;
+            double month = (m + 2) % 12 + 1;
+            double day = d + 1;
+            var utcDate = new DateTime(year, (int) month, (int) day);
+            return utcDate.AddDays(julianDate - (int)(julianDate + .5));
         }
     }
 }
