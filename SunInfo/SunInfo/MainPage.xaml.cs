@@ -3,6 +3,7 @@ using System.Device.Location;
 using System.Globalization;
 using System.Threading;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 using SunInfo.AstroAlgorithms;
 
 namespace SunInfo
@@ -17,7 +18,7 @@ namespace SunInfo
         private Degree _currLongitude = new Degree(0);
 
         private DateTime _currUtcDateTime;
-        private SimulationStep _simulationStep;
+        private readonly SimulationStep _simulationStep;
 
         private readonly SunDataProvider _sunDataProvider = new SunDataProvider();
 
@@ -27,7 +28,7 @@ namespace SunInfo
             _timer = new Timer(OnTimerEvent, null, 0, 1000);
             StartLocationService();
             _currUtcDateTime = DateTime.UtcNow;
-            _simulationStep = SimulationStep.SimulationStepNormal;
+            _simulationStep = new SimulationStep();
         }
 
         private void StartLocationService()
@@ -70,10 +71,10 @@ namespace SunInfo
             textBlockLocalTime.Text = sunData.LocalTime.ToString(CultureInfo.InvariantCulture);
             textBlockSunEarthDistAU.Text = sunData.SunEarthDistAU.ToString("0.00000000");
             textBlockSunEarthDistKm.Text = sunData.SunEarthDistKm.ToString("### ### ##0");
-            textBlockAxialTilt.Text = sunData.AxialTilt.ToString();
+            textBlockAxialTilt.Text = sunData.AxialTilt.ToString(true);
             textBlockRA.Text = string.Format("{0}h {1}m {2}s", sunData.RightAscension.Hours, sunData.RightAscension.Minutes, sunData.RightAscension.Seconds);
             textBlockDec.Text = sunData.Declination.ToString();
-            textBlockAngularDiameter.Text = sunData.AngularDiameter.ToString();
+            textBlockAngularDiameter.Text = sunData.AngularDiameter.ToString(true);
             textBlockHourAngle.Text = string.Format("{0}h {1}m {2}s", sunData.HourAngle.Hours, sunData.HourAngle.Minutes, sunData.HourAngle.Seconds);
             textBlockAz.Text = sunData.Azimuth.ToString();
             textBlockAlt.Text = sunData.Altitude.ToString();
@@ -94,7 +95,7 @@ namespace SunInfo
 
         private void OnNormal(object sender, EventArgs e)
         {
-            _simulationStep = SimulationStep.SimulationStepNormal;
+            _simulationStep.Normal();
             RefreshInfo();
         }
 
@@ -108,6 +109,32 @@ namespace SunInfo
         {
             _simulationStep.Ff();
             RefreshInfo();
+        }
+
+        private void OnAbout(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/About.xaml", UriKind.Relative));
+        }
+
+        private void OnTime(object sender, EventArgs e)
+        {
+            PhoneApplicationService.Current.State["CurrLocalDateTime"] = _currUtcDateTime.ToLocalTime();
+            NavigationService.Navigate(new Uri("/Time.xaml", UriKind.Relative));
+        }
+
+        private void OnLocation(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Location.xaml", UriKind.Relative));
+        }
+
+        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            if (PhoneApplicationService.Current.State.ContainsKey("CurrLocalDateTime"))
+            {
+                _currUtcDateTime = ((DateTime)PhoneApplicationService.Current.State["CurrLocalDateTime"]).ToUniversalTime();
+                RefreshInfo();
+            }
         }
     }
 }

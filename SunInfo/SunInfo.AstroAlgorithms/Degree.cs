@@ -46,9 +46,9 @@ namespace SunInfo.AstroAlgorithms
             get { return (((Math.Abs(_degree) - Degrees) * (100.0 * (60.0 / 100.0))) - Minutes) * (100.0 * (60.0 / 100.0)); }
         }
 
-        public override string ToString()
+        public string ToString(bool secondsWithDecimals = false)
         {
-            return string.Format("{0}{1}° {2}' {3}\"", Minus, Degrees.ToString("00"), Minutes.ToString("00"), Seconds.ToString("00.0"));
+            return string.Format("{0}{1}° {2}' {3}\"", Minus, Degrees.ToString("00"), Minutes.ToString("00"), Seconds.ToString(secondsWithDecimals ? "00.0" : "00"));
         }
 
         public static Degree operator +(Degree degree1, Degree degree2)

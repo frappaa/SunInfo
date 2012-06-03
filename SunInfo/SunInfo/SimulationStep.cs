@@ -34,16 +34,21 @@ namespace SunInfo
         public Direction Dir { get; set; }
         public Quantity Qty { get; set; }
 
+        public SimulationStep()
+        {
+            Normal();
+        }
+
         public bool IsStill()
         {
             return Dir == Direction.Undefined || Qty == Quantity.Undefined;
         }
 
-        public static readonly SimulationStep SimulationStepNormal = new SimulationStep
+        public void Normal()
         {
-            Dir = Direction.Forward,
-            Qty = Quantity.OneSecond
-        };
+            Dir = Direction.Forward;
+            Qty = Quantity.OneSecond;
+        }
 
         public TimeSpan ToTimeSpan()
         {

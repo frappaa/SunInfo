@@ -22,8 +22,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="Sun Info" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Position" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="SUN INFO" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="position" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -94,15 +94,14 @@
     <!--Sample code showing usage of ApplicationBar-->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton Click="OnRew" IconUri="/Images/appbar.transport.rew.rest.png" Text="Decrease speed"/>
-            <shell:ApplicationBarIconButton Click="OnNormal" IconUri="/Images/appbar.transport.play.rest.png" Text="Normal speed"/>
+            <shell:ApplicationBarIconButton Click="OnRew" IconUri="/Images/appbar.transport.rew.rest.png" Text="Decr. speed"/>
+            <shell:ApplicationBarIconButton Click="OnNormal" IconUri="/Images/appbar.transport.play.rest.png" Text="Nrm. speed"/>
             <shell:ApplicationBarIconButton Click="OnNow" IconUri="/Images/appbar.download.rest.png" Text="Now"/>
-            <shell:ApplicationBarIconButton Click="OnFf" IconUri="/Images/appbar.transport.ff.rest.png" Text="Increase speed"/>
+            <shell:ApplicationBarIconButton Click="OnFf" IconUri="/Images/appbar.transport.ff.rest.png" Text="Incr. speed"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Location"/>
-                <shell:ApplicationBarMenuItem Text="Time"/>
-                <shell:ApplicationBarMenuItem Text="Refresh rate"/>
-                <shell:ApplicationBarMenuItem Text="About"/>
+                <shell:ApplicationBarMenuItem Text="Location" Click="OnLocation"/>
+                <shell:ApplicationBarMenuItem Text="Time" Click="OnTime"/>
+                <shell:ApplicationBarMenuItem Text="About" Click="OnAbout"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

@@ -47,7 +47,7 @@ namespace SunInfo.AstroAlgorithms
             double month = (m + 2) % 12 + 1;
             double day = d + 1;
             var utcDate = new DateTime(year, (int) month, (int) day);
-            return utcDate.AddDays(julianDate - (int)(julianDate + .5));
+            return utcDate.AddDays((julianDate + .5) - (int)(julianDate + .5));
         }
     }
 }
