@@ -27,7 +27,28 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"></Grid>
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel>
+                <CheckBox Content="Use GPS" Name="checkBoxUseGps" Checked="OnUseGpsChecked" Unchecked="OnUseGpsUnchecked"/>
+                <TextBlock Name="lblSelectLatitude" Text="Select Latitude"/>
+                <!--<Grid x:Name="Latitude" Grid.Row="1" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="textBoxLatDeg" Grid.Row="0" Grid.Column="0" Text=""  />
+                    <TextBox Name="textBoxLatMin" Grid.Row="0" Grid.Column="1" Text="" />
+                    <TextBox Name="textBoxLatSec" Grid.Row="0" Grid.Column="2" Text="" />
+                </Grid>-->
+                <TextBox Name="textBoxLatitude" Text="" />
+                <TextBlock Name="lblSelectLongitude" Text="Select Longitude"/>
+                <TextBox Name="textBoxLongitude" Text="" />
+            </StackPanel>
+        </Grid>
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>

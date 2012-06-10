@@ -2,6 +2,7 @@
 using System.Device.Location;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using SunInfo.AstroAlgorithms;
@@ -14,11 +15,14 @@ namespace SunInfo
         
         private Timer _timer;
 
+        private bool _useGps = true;
+
         private Degree _currLatitude = new Degree(0);
         private Degree _currLongitude = new Degree(0);
 
-        private DateTime _currUtcDateTime;
-        private readonly SimulationStep _simulationStep;
+        private bool _now = true;
+        private DateTime _currUtcDateTime = DateTime.UtcNow;
+        private readonly SimulationStep _simulationStep = new SimulationStep();
 
         private readonly SunDataProvider _sunDataProvider = new SunDataProvider();
 
@@ -27,8 +31,6 @@ namespace SunInfo
             InitializeComponent();
             _timer = new Timer(OnTimerEvent, null, 0, 1000);
             StartLocationService();
-            _currUtcDateTime = DateTime.UtcNow;
-            _simulationStep = new SimulationStep();
         }
 
         private void StartLocationService()
@@ -67,8 +69,8 @@ namespace SunInfo
         private void FillUiItems(SunData sunData)
         {
             textBlockJD.Text = sunData.JulianDate.ToString("0.00000");
-            textBlockUTC.Text = sunData.UtcTime.ToString(CultureInfo.InvariantCulture);
-            textBlockLocalTime.Text = sunData.LocalTime.ToString(CultureInfo.InvariantCulture);
+            textBlockUTC.Text = sunData.UtcTime.ToString(CultureInfo.CurrentUICulture);
+            textBlockLocalTime.Text = sunData.LocalTime.ToString(CultureInfo.CurrentUICulture);
             textBlockSunEarthDistAU.Text = sunData.SunEarthDistAU.ToString("0.00000000");
             textBlockSunEarthDistKm.Text = sunData.SunEarthDistKm.ToString("### ### ##0");
             textBlockAxialTilt.Text = sunData.AxialTilt.ToString(true);
@@ -89,12 +91,16 @@ namespace SunInfo
 
         private void OnRew(object sender, EventArgs e)
         {
-            _simulationStep.Rew();
-            RefreshInfo();
+            _now = false;
+            if (_simulationStep.Rew())
+            {
+                RefreshInfo();
+            }
         }
 
         private void OnNormal(object sender, EventArgs e)
         {
+            _now = false;
             _simulationStep.Normal();
             RefreshInfo();
         }
@@ -102,13 +108,17 @@ namespace SunInfo
         private void OnNow(object sender, EventArgs e)
         {
             _currUtcDateTime = DateTime.UtcNow;
+            _now = true;
             RefreshInfo();
         }
 
         private void OnFf(object sender, EventArgs e)
         {
-            _simulationStep.Ff();
-            RefreshInfo();
+            _now = false;
+            if (_simulationStep.Ff())
+            {
+                RefreshInfo();
+            }
         }
 
         private void OnAbout(object sender, EventArgs e)
@@ -118,23 +128,55 @@ namespace SunInfo
 
         private void OnTime(object sender, EventArgs e)
         {
-            PhoneApplicationService.Current.State["CurrLocalDateTime"] = _currUtcDateTime.ToLocalTime();
+            PhoneApplicationService.Current.State[StateKeys.CurrLocalDateTime] = _currUtcDateTime.ToLocalTime();
             NavigationService.Navigate(new Uri("/Time.xaml", UriKind.Relative));
         }
 
         private void OnLocation(object sender, EventArgs e)
         {
+            PhoneApplicationService.Current.State[StateKeys.UseGps] = _useGps;
+            PhoneApplicationService.Current.State[StateKeys.CurrLatitude] = _currLatitude;
+            PhoneApplicationService.Current.State[StateKeys.CurrLongitude] = _currLongitude;
             NavigationService.Navigate(new Uri("/Location.xaml", UriKind.Relative));
         }
 
-        protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (PhoneApplicationService.Current.State.ContainsKey("CurrLocalDateTime"))
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLocalDateTime))
             {
-                _currUtcDateTime = ((DateTime)PhoneApplicationService.Current.State["CurrLocalDateTime"]).ToUniversalTime();
-                RefreshInfo();
+                _currUtcDateTime = ((DateTime)PhoneApplicationService.Current.State[StateKeys.CurrLocalDateTime]).ToUniversalTime();
             }
+            bool useGps = true;
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.UseGps))
+            {
+                useGps = ((bool)PhoneApplicationService.Current.State[StateKeys.UseGps]);
+            }
+            if (!useGps)
+            {
+                if(_useGps)
+                {
+                    _geoCoordinateWatcher.Stop();
+                }
+                if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLatitude))
+                {
+                    _currLatitude = ((Degree) PhoneApplicationService.Current.State[StateKeys.CurrLatitude]);
+                }
+                if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLongitude))
+                {
+                    _currLongitude = ((Degree) PhoneApplicationService.Current.State[StateKeys.CurrLongitude]);
+                }
+                _useGps = false;
+            }
+            else
+            {
+                if(!_useGps)
+                {
+                    _geoCoordinateWatcher.Start();
+                }
+                _useGps = true;
+            }
+            RefreshInfo();
         }
     }
 }

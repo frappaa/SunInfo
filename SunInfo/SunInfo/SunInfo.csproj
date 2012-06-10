@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulationStep.cs" />
+    <Compile Include="StateKeys.cs" />
     <Compile Include="SunData.cs" />
     <Compile Include="SunDataProvider.cs" />
     <Compile Include="Time.xaml.cs">
@@ -140,6 +141,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
+    <Content Include="Toolkit.Content\ApplicationBar.Cancel.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Toolkit.Content\ApplicationBar.Check.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SunInfo.AstroAlgorithms\SunInfo.AstroAlgorithms.csproj">

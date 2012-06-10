@@ -10,9 +10,9 @@ namespace SunInfo
         public Time()
         {
             InitializeComponent();
-            if (PhoneApplicationService.Current.State.ContainsKey("CurrLocalDateTime"))
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLocalDateTime))
             {
-                _dateTime = (DateTime)PhoneApplicationService.Current.State["CurrLocalDateTime"];
+                _dateTime = (DateTime)PhoneApplicationService.Current.State[StateKeys.CurrLocalDateTime];
             }
             datePicker.Value = _dateTime;
             timePicker.Value = _dateTime;
@@ -26,7 +26,7 @@ namespace SunInfo
 
         private void OnCheck(object sender, EventArgs e)
         {
-            PhoneApplicationService.Current.State["CurrLocalDateTime"] = _dateTime;
+            PhoneApplicationService.Current.State[StateKeys.CurrLocalDateTime] = _dateTime;
             NavigationService.GoBack();
         }
 

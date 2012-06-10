@@ -1,23 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using SunInfo.AstroAlgorithms;
 
 namespace SunInfo
 {
     public partial class Location : PhoneApplicationPage
     {
+        private bool? _useGps = true;
+        private Degree _latitude = new Degree(0);
+        private Degree _longitude = new Degree(0);
+
         public Location()
         {
             InitializeComponent();
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLatitude))
+            {
+                _latitude = (Degree)PhoneApplicationService.Current.State[StateKeys.CurrLatitude];
+            }
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLongitude))
+            {
+                _longitude = (Degree)PhoneApplicationService.Current.State[StateKeys.CurrLongitude];
+            }
+            textBoxLatitude.Text = Utils.GetLatitudeString(_latitude);
+            textBoxLongitude.Text = Utils.GetLongitudeString(_longitude);
+            checkBoxUseGps.IsChecked = _useGps;
         }
 
         private void OnCancel(object sender, EventArgs e)
@@ -27,7 +34,24 @@ namespace SunInfo
 
         private void OnCheck(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            PhoneApplicationService.Current.State[StateKeys.UseGps] = _useGps;
+            PhoneApplicationService.Current.State[StateKeys.CurrLatitude] = _latitude;
+            PhoneApplicationService.Current.State[StateKeys.CurrLongitude] = _longitude;
+            NavigationService.GoBack();
+        }
+
+        private void OnUseGpsChecked(object sender, System.Windows.RoutedEventArgs args)
+        {
+            _useGps = checkBoxUseGps.IsChecked;
+            textBoxLatitude.IsEnabled = _useGps.HasValue && !_useGps.Value;
+            textBoxLongitude.IsEnabled = _useGps.HasValue && !_useGps.Value;
+        }
+
+        private void OnUseGpsUnchecked(object sender, System.Windows.RoutedEventArgs args)
+        {
+            _useGps = checkBoxUseGps.IsChecked;
+            textBoxLatitude.IsEnabled = _useGps.HasValue && !_useGps.Value;
+            textBoxLongitude.IsEnabled = _useGps.HasValue && !_useGps.Value;
         }
     }
 }

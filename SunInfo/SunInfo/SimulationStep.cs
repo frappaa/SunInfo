@@ -85,12 +85,12 @@ namespace SunInfo
             return timeSpan;
         }
 
-        public void Rew()
+        public bool Rew()
         {
             if (Dir == Direction.Backward)
             {
                 if (Qty == Quantity.ThreeHundredSixtyFiveDays)
-                    return;
+                    return false;
                 Qty++;
             }
             else if (Dir == Direction.Undefined)
@@ -106,14 +106,15 @@ namespace SunInfo
                     Dir = Direction.Undefined;
                 }
             }
+            return true;
         }
 
-        public void Ff()
+        public bool Ff()
         {
             if (Dir == Direction.Forward)
             {
                 if (Qty == Quantity.ThreeHundredSixtyFiveDays)
-                    return;
+                    return false;
                 Qty++;
             }
             else if (Dir == Direction.Undefined)
@@ -129,8 +130,7 @@ namespace SunInfo
                     Dir = Direction.Undefined;
                 }
             }
+            return true;
         }
-
-
     }
 }

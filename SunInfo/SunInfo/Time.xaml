@@ -36,7 +36,7 @@
 
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="Ok" Click="OnCheck"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="Done" Click="OnCheck"/>
             <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="Cancel" Click="OnCancel"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
