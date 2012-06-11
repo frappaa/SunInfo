@@ -27,8 +27,8 @@ namespace SunInfo
             OneMinute,
             OneHour,
             OneDay,
-            ThirtyDays,
-            ThreeHundredSixtyFiveDays,
+            OneMonth,
+            OneYear,
         }
 
         public Direction Dir { get; set; }
@@ -37,6 +37,50 @@ namespace SunInfo
         public SimulationStep()
         {
             Normal();
+        }
+
+        public override string ToString()
+        {
+            string qty = "";
+            switch (Qty)
+            {
+                case Quantity.OneSecond:
+                    qty = "1 sec.";
+                    break;
+                case Quantity.OneMinute:
+                    qty = "1 min.";
+                    break;
+                case Quantity.OneHour:
+                    qty = "1 hr.";
+                    break;
+                case Quantity.OneDay:
+                    qty = "1 day";
+                    break;
+                case Quantity.OneMonth:
+                    qty = "1 month";
+                    break;
+                case Quantity.OneYear:
+                    qty = "1 year";
+                    break;
+                case Quantity.Undefined:
+                default:
+                    qty = "";
+                    break;
+            }
+            string dir = "";
+            switch(Dir)
+            {
+                case Direction.Forward:
+                    dir = "forw.";
+                    break;
+                case Direction.Backward:
+                    dir = "backw.";
+                    break;
+                case Direction.Undefined:
+                    dir = "still";
+                    break;
+            }
+            return String.Format("{0} {1}", qty, dir).Trim();
         }
 
         public bool IsStill()
@@ -50,46 +94,56 @@ namespace SunInfo
             Qty = Quantity.OneSecond;
         }
 
-        public TimeSpan ToTimeSpan()
+        public DateTime Step(DateTime currDateTime)
         {
-            TimeSpan timeSpan;
+            DateTime newDateTime;
+            int unit;
+            switch (Dir)
+            {
+                case Direction.Backward:
+                    unit = -1;
+                    break;
+                case Direction.Forward:
+                    unit = 1;
+                    break;
+                case Direction.Undefined:
+                default:
+                    unit = 0;
+                    break;
+            }
             switch(Qty)
             {
                 case Quantity.OneSecond:
-                    timeSpan = new TimeSpan(0, 0, 1);
+                    newDateTime = currDateTime.AddSeconds(unit);
                     break;
                 case Quantity.OneMinute:
-                    timeSpan = new TimeSpan(0, 1, 0);
+                    newDateTime = currDateTime.AddMinutes(unit);
                     break;
                 case Quantity.OneHour:
-                    timeSpan = new TimeSpan(1, 0, 0);
+                    newDateTime = currDateTime.AddHours(unit);
                     break;
                 case Quantity.OneDay:
-                    timeSpan = new TimeSpan(1, 0, 0, 0);
+                    newDateTime = currDateTime.AddDays(unit);
                     break;
-                case Quantity.ThirtyDays:
-                    timeSpan = new TimeSpan(30, 0, 0, 0);
+                case Quantity.OneMonth:
+                    newDateTime = currDateTime.AddMonths(unit);
                     break;
-                case Quantity.ThreeHundredSixtyFiveDays:
-                    timeSpan = new TimeSpan(365, 0, 0, 0);
+                case Quantity.OneYear:
+                    newDateTime = currDateTime.AddYears(unit);
                     break;
                 case Quantity.Undefined:
                 default:
-                    timeSpan = new TimeSpan(0);
+                    newDateTime = currDateTime;
                     break;
             }
-            if (Dir == Direction.Backward)
-            {
-                timeSpan = -timeSpan;
-            }
-            return timeSpan;
+            return newDateTime;
         }
 
         public bool Rew()
         {
             if (Dir == Direction.Backward)
             {
-                if (Qty == Quantity.ThreeHundredSixtyFiveDays)
+                if (Qty == Quantity.OneYear)
                     return false;
                 Qty++;
             }
@@ -113,7 +167,7 @@ namespace SunInfo
         {
             if (Dir == Direction.Forward)
             {
-                if (Qty == Quantity.ThreeHundredSixtyFiveDays)
+                if (Qty == Quantity.OneYear)
                     return false;
                 Qty++;
             }

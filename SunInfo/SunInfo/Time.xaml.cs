@@ -32,12 +32,14 @@ namespace SunInfo
 
         private void OnDateChanged(object sender, DateTimeValueChangedEventArgs e)
         {
-            if (e.NewDateTime != null) _dateTime = (DateTime)e.NewDateTime;
+            if (e.NewDateTime != null)
+                _dateTime = (DateTime)e.NewDateTime;
         }
 
         private void OnTimeChanged(object sender, DateTimeValueChangedEventArgs e)
         {
-            if (e.NewDateTime != null) _dateTime = (DateTime)e.NewDateTime;
+            if (e.NewDateTime != null)
+                _dateTime = (DateTime)e.NewDateTime;
         }
     }
 }

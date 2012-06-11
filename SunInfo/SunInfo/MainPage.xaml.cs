@@ -63,7 +63,8 @@ namespace SunInfo
             textBlockLon.Text = Utils.GetLongitudeString(_currLongitude);
             var sunData = _sunDataProvider.Get(_currUtcDateTime, _currLatitude, _currLongitude);
             FillUiItems(sunData);
-            _currUtcDateTime += _simulationStep.ToTimeSpan();
+            textBlockSpeed.Text = _simulationStep.ToString();
+            _currUtcDateTime = _simulationStep.Step(_currUtcDateTime);
         }
 
         private void FillUiItems(SunData sunData)

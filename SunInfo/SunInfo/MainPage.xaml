@@ -47,6 +47,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -58,36 +59,39 @@
             <TextBlock Name="textBlockUTC" Grid.Row="1" Grid.Column="1" />
             <TextBlock Name="textBlocklblLocalTime" Grid.Row="2" Grid.Column="0" Text="Local Time:" />
             <TextBlock Name="textBlockLocalTime" Grid.Row="2" Grid.Column="1" />
-            <TextBlock Name="textBlocklblSunEarthDistAU" Grid.Row="3" Grid.Column="0" Text="Sun-Earth Distance (AU):" Visibility="Collapsed"/>
-            <TextBlock Name="textBlockSunEarthDistAU" Grid.Row="3" Grid.Column="1" Visibility="Collapsed"/>
-            <TextBlock Name="textBlocklblSunEarthDistKm" Grid.Row="4" Grid.Column="0" Text="Sun-Earth Distance (Km):" />
-            <TextBlock Name="textBlockSunEarthDistKm" Grid.Row="4" Grid.Column="1" />
-            <TextBlock Name="textBlocklblAngularDiameter" Grid.Row="5" Grid.Column="0" Text="Angular Diameter:" />
-            <TextBlock Name="textBlockAngularDiameter" Grid.Row="5" Grid.Column="1" />
-            <TextBlock Name="textBlocklblAxialTilt" Grid.Row="6" Grid.Column="0" Text="Axial Tilt:" />
-            <TextBlock Name="textBlockAxialTilt" Grid.Row="6" Grid.Column="1" />
-            <TextBlock Name="textBlocklblRA" Grid.Row="7" Grid.Column="0" Text="Right Ascension:" />
-            <TextBlock Name="textBlockRA" Grid.Row="7" Grid.Column="1" />
-            <TextBlock Name="textBlocklblDec" Grid.Row="8" Grid.Column="0" Text="Declination:" />
-            <TextBlock Name="textBlockDec" Grid.Row="8" Grid.Column="1" />
-            <TextBlock Name="textBlocklblLat" Grid.Row="9" Grid.Column="0" Text="Latitude:" />
-            <TextBlock Name="textBlockLat" Grid.Row="9" Grid.Column="1" />
-            <TextBlock Name="textBlocklblLon" Grid.Row="10" Grid.Column="0" Text="Latitude:" />
-            <TextBlock Name="textBlockLon" Grid.Row="10" Grid.Column="1" />
-            <TextBlock Name="textBlocklblHourAngle" Grid.Row="11" Grid.Column="0" Text="Hour Angle:" />
-            <TextBlock Name="textBlockHourAngle" Grid.Row="11" Grid.Column="1" />
-            <TextBlock Name="textBlocklblAz" Grid.Row="12" Grid.Column="0" Text="Azimuth:" />
-            <TextBlock Name="textBlockAz" Grid.Row="12" Grid.Column="1" />
-            <TextBlock Name="textBlocklblAlt" Grid.Row="13" Grid.Column="0" Text="Altitude:" />
-            <TextBlock Name="textBlockAlt" Grid.Row="13" Grid.Column="1" />
-            <TextBlock Name="textBlocklblShadowRatio" Grid.Row="14" Grid.Column="0" Text="Shadow Ratio:" />
-            <TextBlock Name="textBlockShadowRatio" Grid.Row="14" Grid.Column="1" />
-            <TextBlock Name="textBlocklblSunrise" Grid.Row="15" Grid.Column="0" Text="Sunrise:" />
-            <TextBlock Name="textBlockSunrise" Grid.Row="15" Grid.Column="1" />
-            <TextBlock Name="textBlocklblTransit" Grid.Row="16" Grid.Column="0" Text="Transit:" />
-            <TextBlock Name="textBlockTransit" Grid.Row="16" Grid.Column="1" />
-            <TextBlock Name="textBlocklblSunset" Grid.Row="17" Grid.Column="0" Text="Sunset:" />
-            <TextBlock Name="textBlockSunset" Grid.Row="17" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSpeed" Grid.Row="3" Grid.Column="0" Text="Sym. Speed:" />
+            <TextBlock Name="textBlockSpeed" Grid.Row="3" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunEarthDistAU" Grid.Row="4" Grid.Column="0" Text="Sun-Earth Distance (AU):" Visibility="Collapsed"/>
+            <TextBlock Name="textBlockSunEarthDistAU" Grid.Row="4" Grid.Column="1" Visibility="Collapsed"/>
+            <TextBlock Name="textBlocklblSunEarthDistKm" Grid.Row="5" Grid.Column="0" Text="Sun-Earth Distance (Km):" />
+            <TextBlock Name="textBlockSunEarthDistKm" Grid.Row="5" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAngularDiameter" Grid.Row="6" Grid.Column="0" Text="Angular Diameter:" />
+            <TextBlock Name="textBlockAngularDiameter" Grid.Row="6" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAxialTilt" Grid.Row="7" Grid.Column="0" Text="Axial Tilt:" />
+            <TextBlock Name="textBlockAxialTilt" Grid.Row="7" Grid.Column="1" />
+            <TextBlock Name="textBlocklblRA" Grid.Row="8" Grid.Column="0" Text="Right Ascension:" />
+            <TextBlock Name="textBlockRA" Grid.Row="8" Grid.Column="1" />
+            <TextBlock Name="textBlocklblDec" Grid.Row="9" Grid.Column="0" Text="Declination:" />
+            <TextBlock Name="textBlockDec" Grid.Row="9" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLat" Grid.Row="10" Grid.Column="0" Text="Latitude:" />
+            <TextBlock Name="textBlockLat" Grid.Row="10" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLon" Grid.Row="11" Grid.Column="0" Text="Latitude:" />
+            <TextBlock Name="textBlockLon" Grid.Row="11" Grid.Column="1" />
+            <TextBlock Name="textBlocklblHourAngle" Grid.Row="12" Grid.Column="0" Text="Hour Angle:" />
+            <TextBlock Name="textBlockHourAngle" Grid.Row="12" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAz" Grid.Row="13" Grid.Column="0" Text="Azimuth:" />
+            <TextBlock Name="textBlockAz" Grid.Row="13" Grid.Column="1" />
+            <TextBlock Name="textBlocklblAlt" Grid.Row="14" Grid.Column="0" Text="Altitude:" />
+            <TextBlock Name="textBlockAlt" Grid.Row="14" Grid.Column="1" />
+            <TextBlock Name="textBlocklblShadowRatio" Grid.Row="15" Grid.Column="0" Text="Shadow Ratio:" />
+            <TextBlock Name="textBlockShadowRatio" Grid.Row="15" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunrise" Grid.Row="16" Grid.Column="0" Text="Sunrise:" />
+            <TextBlock Name="textBlockSunrise" Grid.Row="16" Grid.Column="1" />
+            <TextBlock Name="textBlocklblTransit" Grid.Row="17" Grid.Column="0" Text="Transit:" />
+            <TextBlock Name="textBlockTransit" Grid.Row="17" Grid.Column="1" />
+            <TextBlock Name="textBlocklblSunset" Grid.Row="18" Grid.Column="0" Text="Sunset:" />
+            <TextBlock Name="textBlockSunset" Grid.Row="18" Grid.Column="1" />
+
         </Grid>
     </Grid>
  
