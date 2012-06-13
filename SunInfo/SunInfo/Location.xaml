@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -29,24 +30,60 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <CheckBox Content="Use GPS" Name="checkBoxUseGps" Checked="OnUseGpsChecked" Unchecked="OnUseGpsUnchecked"/>
+                <CheckBox Content="Use GPS/WiFi receiver" Name="checkBoxUseGps" Checked="OnUseGpsChecked" Unchecked="OnUseGpsUnchecked"/>
                 <TextBlock Name="lblSelectLatitude" Text="Select Latitude"/>
-                <!--<Grid x:Name="Latitude" Grid.Row="1" Margin="12,0,12,0">
+                <Grid x:Name="Latitude" Grid.Row="1" Margin="12,0,12,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="75" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Name="textBoxLatDeg" Grid.Row="0" Grid.Column="0" Text=""  />
-                    <TextBox Name="textBoxLatMin" Grid.Row="0" Grid.Column="1" Text="" />
-                    <TextBox Name="textBoxLatSec" Grid.Row="0" Grid.Column="2" Text="" />
-                </Grid>-->
-                <TextBox Name="textBoxLatitude" Text="" />
+                    <TextBox Name="textBoxLatDeg" Grid.Row="0" Grid.Column="0" Text="" InputScope="Number" LostFocus="OnTextBoxLatDegLostFocus" />
+                    <TextBlock Name="lblLatDeg" Grid.Row="0" Grid.Column="1" Text="°"  />
+                    <TextBox Name="textBoxLatMin" Grid.Row="0" Grid.Column="2" Text="" InputScope="Number" LostFocus="OnTextBoxLatMinLostFocus" />
+                    <TextBlock Name="lblLatMin" Grid.Row="0" Grid.Column="3" Text="'"  />
+                    <TextBox Name="textBoxLatSec" Grid.Row="0" Grid.Column="4" Text="" InputScope="Number" LostFocus="OnTextBoxLatSecLostFocus" />
+                    <TextBlock Name="lblLatSec" Grid.Row="0" Grid.Column="5" Text="&quot;"  />
+                    <toolkit:ListPicker x:Name="pickerLatEmisph" Header="" Grid.Row="0" Grid.Column="6">
+                        <toolkit:ListPickerItem Content="N" />
+                        <toolkit:ListPickerItem Content="S" />
+                    </toolkit:ListPicker>
+                </Grid>
+                <!--<TextBox Name="textBoxLatitude" Text="" />-->
                 <TextBlock Name="lblSelectLongitude" Text="Select Longitude"/>
-                <TextBox Name="textBoxLongitude" Text="" />
+                <Grid x:Name="Longitude" Grid.Row="1" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="75" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="75" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="textBoxLonDeg" Grid.Row="0" Grid.Column="0" Text="" InputScope="Number" LostFocus="OnTextBoxLonDegLostFocus" />
+                    <TextBlock Name="lblLonDeg" Grid.Row="0" Grid.Column="1" Text="°"  />
+                    <TextBox Name="textBoxLonMin" Grid.Row="0" Grid.Column="2" Text="" InputScope="Number" LostFocus="OnTextBoxLonMinLostFocus"/>
+                    <TextBlock Name="lblLonMin" Grid.Row="0" Grid.Column="3" Text="'"  />
+                    <TextBox Name="textBoxLonSec" Grid.Row="0" Grid.Column="4" Text="" InputScope="Number" LostFocus="OnTextBoxLonSecLostFocus"/>
+                    <TextBlock Name="lblLonSec" Grid.Row="0" Grid.Column="5" Text="&quot;"  />
+                    <toolkit:ListPicker x:Name="pickerLonEmisph" Header="" Grid.Row="0" Grid.Column="6">
+                        <toolkit:ListPickerItem Content="E" />
+                        <toolkit:ListPickerItem Content="W" />
+                    </toolkit:ListPicker>
+                </Grid>
+                <!--<TextBox Name="textBoxLongitude" Text="" />-->
+
             </StackPanel>
         </Grid>
     </Grid>

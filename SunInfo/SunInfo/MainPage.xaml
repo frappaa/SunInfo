@@ -59,7 +59,7 @@
             <TextBlock Name="textBlockUTC" Grid.Row="1" Grid.Column="1" />
             <TextBlock Name="textBlocklblLocalTime" Grid.Row="2" Grid.Column="0" Text="Local Time:" />
             <TextBlock Name="textBlockLocalTime" Grid.Row="2" Grid.Column="1" />
-            <TextBlock Name="textBlocklblSpeed" Grid.Row="3" Grid.Column="0" Text="Sym. Speed:" />
+            <TextBlock Name="textBlocklblSpeed" Grid.Row="3" Grid.Column="0" Text="Sim. Speed:" />
             <TextBlock Name="textBlockSpeed" Grid.Row="3" Grid.Column="1" />
             <TextBlock Name="textBlocklblSunEarthDistAU" Grid.Row="4" Grid.Column="0" Text="Sun-Earth Distance (AU):" Visibility="Collapsed"/>
             <TextBlock Name="textBlockSunEarthDistAU" Grid.Row="4" Grid.Column="1" Visibility="Collapsed"/>

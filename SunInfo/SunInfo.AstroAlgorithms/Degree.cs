@@ -28,7 +28,12 @@ namespace SunInfo.AstroAlgorithms
 
         public string Minus
         {
-            get { return _degree < 0 ? "-" : String.Empty; }
+            get { return IsNegative ? "-" : String.Empty; }
+        }
+
+        public bool IsNegative
+        {
+            get { return _degree < 0; }
         }
 
         public short Degrees
