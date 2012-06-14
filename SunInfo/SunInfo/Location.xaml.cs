@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using SunInfo.AstroAlgorithms;
@@ -24,6 +25,10 @@ namespace SunInfo
         public Location()
         {
             InitializeComponent();
+            if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.UseGps))
+            {
+                _useGps = (bool)PhoneApplicationService.Current.State[StateKeys.UseGps];
+            }
             if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLatitude))
             {
                 _latitude = (Degree)PhoneApplicationService.Current.State[StateKeys.CurrLatitude];
@@ -54,6 +59,8 @@ namespace SunInfo
             pickerLonEmisph.SelectedIndex = _longitude.IsNegative ? 1 : 0;
 
             checkBoxUseGps.IsChecked = _useGps;
+
+            EnableControls();
         }
 
         private void OnCancel(object sender, EventArgs e)
@@ -66,16 +73,39 @@ namespace SunInfo
             PhoneApplicationService.Current.State[StateKeys.UseGps] = _useGps;
             if (_useGps.HasValue && !_useGps.Value)
             {
-                if (_latDeg.HasValue && _latMin.HasValue && _latSec.HasValue)
+                string globalMessage = String.Empty;
+                string message;
+                TryParseLatDeg(out message);
+                globalMessage = globalMessage + message;
+                TryParseLatMin(out message);
+                globalMessage = globalMessage + message;
+                TryParseLatSec(out message);
+                globalMessage = globalMessage + message;
+                TryParseLonDeg(out message);
+                globalMessage = globalMessage + message;
+                TryParseLonMin(out message);
+                globalMessage = globalMessage + message;
+                TryParseLonSec(out message);
+                globalMessage = globalMessage + message;
+                if (!String.IsNullOrEmpty(globalMessage))
                 {
-                    var neg = (short)(pickerLatEmisph.SelectedIndex == 0 ? 1 : -1);
-                    _latitude = new Degree((short) (_latDeg.Value * neg), (short) (_latMin.Value * neg), _latSec.Value * neg);
+                    MessageBox.Show(globalMessage);
                 }
-
-                if (_lonDeg.HasValue && _lonMin.HasValue && _lonSec.HasValue)
+                else
                 {
-                    var neg = (short)(pickerLonEmisph.SelectedIndex == 0 ? 1 : -1);
-                    _longitude = new Degree((short)(_lonDeg.Value * neg), (short)(_lonMin.Value * neg), _lonSec.Value * neg);
+                    if (_latDeg.HasValue && _latMin.HasValue && _latSec.HasValue)
+                    {
+                        var neg = (short) (pickerLatEmisph.SelectedIndex == 0 ? 1 : -1);
+                        _latitude = new Degree((short) (_latDeg.Value*neg), (short) (_latMin.Value*neg),
+                                               _latSec.Value*neg);
+                    }
+
+                    if (_lonDeg.HasValue && _lonMin.HasValue && _lonSec.HasValue)
+                    {
+                        var neg = (short) (pickerLonEmisph.SelectedIndex == 0 ? 1 : -1);
+                        _longitude = new Degree((short) (_lonDeg.Value*neg), (short) (_lonMin.Value*neg),
+                                                _lonSec.Value*neg);
+                    }
                 }
             }
 
@@ -84,7 +114,7 @@ namespace SunInfo
             NavigationService.GoBack();
         }
 
-        private void OnUseGpsChecked(object sender, System.Windows.RoutedEventArgs args)
+        private void OnUseGpsChecked(object sender, RoutedEventArgs args)
         {
             EnableControls();
         }
@@ -103,141 +133,202 @@ namespace SunInfo
             pickerLonEmisph.IsEnabled = isEnabled;
         }
 
-        private void OnUseGpsUnchecked(object sender, System.Windows.RoutedEventArgs args)
+        private void OnUseGpsUnchecked(object sender, RoutedEventArgs args)
         {
             EnableControls();
         }
 
-        private void OnTextBoxLatDegLostFocus(object sender, System.Windows.RoutedEventArgs e)
+        private static void OnLostFocus(TextBox textBox, ParseMethod parseMethod)
         {
-            if(!String.IsNullOrEmpty(textBoxLatDeg.Text))
+            if (String.IsNullOrEmpty(textBox.Text))
             {
-                short val;
-                if (!short.TryParse(textBoxLatDeg.Text, out val) || val < 0 || val > 90)
+                return;
+            }
+            string message;
+            if (parseMethod(out message))
+            {
+                return;
+            }
+            MessageBox.Show(message);
+            textBox.Focus();
+        }
+
+        private delegate bool ParseMethod(out string message);
+
+
+        private void OnTextBoxLatDegLostFocus(object sender, RoutedEventArgs e)
+        {
+            OnLostFocus(textBoxLatDeg, TryParseLatDeg);
+        }
+
+        private bool TryParseLatDeg(out string message)
+        {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLatDeg.Text, out val) || val < 0 || val > 90)
+            {
+                message = "The latitude degree field must be an integer number between 0 and 90.";
+                parsed = false;
+            } else
+            {
+                _latDeg = val;
+                if (val == 90)
                 {
-                    MessageBox.Show("The latitude degree field must be an integer number between 0 and 90.");
-                    textBoxLatDeg.Focus();
+                    _latMin = _latSec = 0;
+                    textBoxLatMin.Text = _latMin.Value.ToString(CultureInfo.InvariantCulture);
+                    textBoxLatSec.Text = _latSec.Value.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            return parsed;
+        }
+
+        private void OnTextBoxLatMinLostFocus(object sender, RoutedEventArgs e)
+        {
+            OnLostFocus(textBoxLatMin, TryParseLatMin);
+        }
+
+        private bool TryParseLatMin(out string message) {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLatMin.Text, out val) || val < 0 || val >= 60)
+            {
+                message = "The latitude minutes field must be an integer number between 0 and 59.";
+                parsed = false;
+            }
+            else
+            {
+                if (_latDeg.HasValue && _latDeg.Value == 90 && val > 0)
+                {
+                    message = "The latitude minutes field must be 0.";
+                    parsed = false;
+                }
+                else
+                {
+                    _latMin = val;
+                }
+            }
+            return parsed;
+        }
+
+        private void OnTextBoxLatSecLostFocus(object sender, RoutedEventArgs e)
+        {
+            OnLostFocus(textBoxLatSec, TryParseLatSec);
+        }
+
+        private bool TryParseLatSec(out string message)
+        {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLatSec.Text, out val) || val < 0 || val >= 60)
+            {
+                message ="The latitude seconds field must be an integer number between 0 and 59.";
+                parsed = false;
+            }
+            else
+            {
+                if (_latDeg.HasValue && _latDeg.Value == 90 && val > 0)
+                {
+                    message = "The latitude seconds field must be 0.";
+                    parsed = false;
                 } else
                 {
-                    _latDeg = val;
+                    _latSec = val;
                 }
             }
+            return parsed;
         }
 
-        private void OnTextBoxLatMinLostFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void OnTextBoxLonDegLostFocus(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(textBoxLatMin.Text))
+            OnLostFocus(textBoxLonDeg, TryParseLonDeg);
+        }
+
+        private bool TryParseLonDeg(out string message)
+        {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLonDeg.Text, out val) || val < 0 || val > 180)
             {
-                short val;
-                if (!short.TryParse(textBoxLatMin.Text, out val) || val < 0 || val >= 60)
+                message = "The longitude degree field must be an integer number between 0 and 180.";
+                parsed = false;
+            }
+            else
+            {
+                _lonDeg = val;
+                if (val == 180)
                 {
-                    MessageBox.Show("The latitude minutes field must be an integer number between 0 and 59.");
-                    textBoxLatMin.Focus();
+                    _lonMin = _lonSec = 0;
+                    textBoxLonMin.Text = _lonMin.Value.ToString(CultureInfo.InvariantCulture);
+                    textBoxLonSec.Text = _lonSec.Value.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            return parsed;
+        }
+
+        private void OnTextBoxLonMinLostFocus(object sender, RoutedEventArgs e)
+        {
+            OnLostFocus(textBoxLatMin, TryParseLonMin);
+        }
+
+        private bool TryParseLonMin(out string message)
+        {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLonMin.Text, out val) || val < 0 || val >= 60)
+            {
+                message = "The longitude minutes field must be an integer number between 0 and 59.";
+                parsed = false;
+            }
+            else
+            {
+                if (_lonDeg.HasValue && _lonDeg.Value == 180 && val > 0)
+                {
+                    message = "The longitude minutes field must be 0.";
+                    parsed = false;
                 }
                 else
                 {
-                    if (_latDeg.HasValue && _latDeg.Value == 90 && val > 0)
-                    {
-                        MessageBox.Show("The latitude minutes field must be 0.");
-                        textBoxLatMin.Focus();
-                    }
-                    else
-                    {
-                        _latMin = val;
-                    }
+                    _lonMin = val;
                 }
             }
+            return parsed;
         }
 
-        private void OnTextBoxLatSecLostFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void OnTextBoxLonSecLostFocus(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(textBoxLatSec.Text))
+            OnLostFocus(textBoxLatSec, TryParseLonSec);
+        }
+
+        private bool TryParseLonSec(out string message)
+        {
+            short val;
+            message = String.Empty;
+            bool parsed = true;
+            if (!short.TryParse(textBoxLonSec.Text, out val) || val < 0 || val >= 60)
             {
-                short val;
-                if (!short.TryParse(textBoxLatSec.Text, out val) || val < 0 || val >= 60)
+                message = "The longitude seconds field must be an integer number between 0 and 59.";
+                parsed = false;
+            }
+            else
+            {
+                if (_lonDeg.HasValue && _lonDeg.Value == 180 && val > 0)
                 {
-                    MessageBox.Show("The latitude seconds field must be an integer number between 0 and 59.");
-                    textBoxLatSec.Focus();
+                    message = "The longitude seconds field must be 0.";
+                    parsed = false;
                 }
                 else
                 {
-                    if (_latDeg.HasValue && _latDeg.Value == 90 && val > 0)
-                    {
-                        MessageBox.Show("The latitude seconds field must be 0.");
-                        textBoxLatSec.Focus();
-                    } else
-                    {
-                        _latSec = val;
-                    }
+                    _lonSec = val;
                 }
             }
+            return parsed;
         }
 
-        private void OnTextBoxLonDegLostFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(textBoxLonDeg.Text))
-            {
-                short val;
-                if (!short.TryParse(textBoxLonDeg.Text, out val) || val < 0 || val > 180)
-                {
-                    MessageBox.Show("The longitude degree field must be an integer number between 0 and 180.");
-                    textBoxLonDeg.Focus();
-                }
-                else
-                {
-                    _lonDeg = val;
-                }
-            }
-        }
 
-        private void OnTextBoxLonMinLostFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(textBoxLonMin.Text))
-            {
-                short val;
-                if (!short.TryParse(textBoxLonMin.Text, out val) || val < 0 || val >= 60)
-                {
-                    MessageBox.Show("The longitude minutes field must be an integer number between 0 and 59.");
-                    textBoxLonMin.Focus();
-                }
-                else
-                {
-                    if (_lonDeg.HasValue && _lonDeg.Value == 180 && val > 0)
-                    {
-                        MessageBox.Show("The longitude minutes field must be 0.");
-                        textBoxLonMin.Focus();
-                    }
-                    else
-                    {
-                        _lonMin = val;
-                    }
-                }
-            }
-        }
-
-        private void OnTextBoxLonSecLostFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(textBoxLonSec.Text))
-            {
-                short val;
-                if (!short.TryParse(textBoxLonSec.Text, out val) || val < 0 || val >= 60)
-                {
-                    MessageBox.Show("The longitude seconds field must be an integer number between 0 and 59.");
-                    textBoxLonSec.Focus();
-                }
-                else
-                {
-                    if (_lonDeg.HasValue && _lonDeg.Value == 180 && val > 0)
-                    {
-                        MessageBox.Show("The longitude seconds field must be 0.");
-                        textBoxLonSec.Focus();
-                    }
-                    else
-                    {
-                        _lonSec = val;
-                    }
-                }
-            }
-        }
     }
 }

@@ -20,7 +20,7 @@ namespace SunInfo
         private Degree _currLatitude = new Degree(0);
         private Degree _currLongitude = new Degree(0);
 
-        private bool _now = true;
+        private bool _realTime = true;
         private DateTime _currUtcDateTime = DateTime.UtcNow;
         private readonly SimulationStep _simulationStep = new SimulationStep();
 
@@ -59,12 +59,13 @@ namespace SunInfo
 
         void RefreshInfo()
         {
+            textBlockLocSource.Text = _useGps ? "GPS/WiFi" : "Manual";
             textBlockLat.Text = Utils.GetLatitudeString(_currLatitude);
             textBlockLon.Text = Utils.GetLongitudeString(_currLongitude);
             var sunData = _sunDataProvider.Get(_currUtcDateTime, _currLatitude, _currLongitude);
             FillUiItems(sunData);
             textBlockSpeed.Text = _simulationStep.ToString();
-            _currUtcDateTime = _simulationStep.Step(_currUtcDateTime);
+            _currUtcDateTime = _realTime ? DateTime.UtcNow : _simulationStep.Step(_currUtcDateTime);
         }
 
         private void FillUiItems(SunData sunData)
@@ -92,7 +93,7 @@ namespace SunInfo
 
         private void OnRew(object sender, EventArgs e)
         {
-            _now = false;
+            _realTime = false;
             if (_simulationStep.Rew())
             {
                 RefreshInfo();
@@ -101,7 +102,7 @@ namespace SunInfo
 
         private void OnNormal(object sender, EventArgs e)
         {
-            _now = false;
+            //_now = false;
             _simulationStep.Normal();
             RefreshInfo();
         }
@@ -109,13 +110,16 @@ namespace SunInfo
         private void OnNow(object sender, EventArgs e)
         {
             _currUtcDateTime = DateTime.UtcNow;
-            _now = true;
+            if (_simulationStep.IsNormal())
+            {
+                _realTime = true;
+            }
             RefreshInfo();
         }
 
         private void OnFf(object sender, EventArgs e)
         {
-            _now = false;
+            _realTime = false;
             if (_simulationStep.Ff())
             {
                 RefreshInfo();
@@ -147,6 +151,7 @@ namespace SunInfo
             if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.CurrLocalDateTime))
             {
                 _currUtcDateTime = ((DateTime)PhoneApplicationService.Current.State[StateKeys.CurrLocalDateTime]).ToUniversalTime();
+                _realTime = false;
             }
             bool useGps = true;
             if (PhoneApplicationService.Current.State.ContainsKey(StateKeys.UseGps))

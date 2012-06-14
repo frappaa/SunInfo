@@ -45,13 +45,13 @@ namespace SunInfo
             switch (Qty)
             {
                 case Quantity.OneSecond:
-                    qty = "1 sec.";
+                    qty = "1 sec";
                     break;
                 case Quantity.OneMinute:
-                    qty = "1 min.";
+                    qty = "1 min";
                     break;
                 case Quantity.OneHour:
-                    qty = "1 hr.";
+                    qty = "1 hr";
                     break;
                 case Quantity.OneDay:
                     qty = "1 day";
@@ -71,10 +71,10 @@ namespace SunInfo
             switch(Dir)
             {
                 case Direction.Forward:
-                    dir = "forw.";
+                    dir = "fwd";
                     break;
                 case Direction.Backward:
-                    dir = "backw.";
+                    dir = "bkd";
                     break;
                 case Direction.Undefined:
                     dir = "still";
@@ -86,6 +86,11 @@ namespace SunInfo
         public bool IsStill()
         {
             return Dir == Direction.Undefined || Qty == Quantity.Undefined;
+        }
+
+        public bool IsNormal()
+        {
+            return Dir == Direction.Forward || Qty == Quantity.OneSecond;
         }
 
         public void Normal()

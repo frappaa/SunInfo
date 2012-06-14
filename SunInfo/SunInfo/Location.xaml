@@ -90,8 +90,8 @@
 
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="Close" Click="OnCheck"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="Close" Click="OnCancel"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.check.rest.png" Text="done" Click="OnCheck"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.cancel.rest.png" Text="cancel" Click="OnCancel"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
