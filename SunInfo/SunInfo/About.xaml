@@ -29,11 +29,25 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <StackPanel>
-                <TextBlock Name="lblAppName" Text="SunInfo" Style="{StaticResource PhoneTextTitle2Style}" />
+                <TextBlock Name="lblAppName" Text="Sun Info" Style="{StaticResource PhoneTextTitle2Style}" />
                 <TextBlock Name="lblAuthor" Text="by Alberto Frappa" Style="{StaticResource PhoneTextTitle3Style}" />
-                <TextBlock Name="lblPublisher" Text="Publisher: Alberto Frappa" />
-                <TextBlock Name="lblVersion" Text="Version: 1.0.0" />
-                <TextBlock Name="lblMail" Text="Mail: frappa.a@gmail.com" />
+                <Grid x:Name="InnerContentPanel" Grid.Row="1" Margin="12,12,12,12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Name="textBlocklblPublisher" Grid.Row="0" Grid.Column="0" Text="Publisher:"/>
+                    <TextBlock Name="textBlockPublisher" Grid.Row="0" Grid.Column="1" Text="Alberto Frappa"/>
+                    <TextBlock Name="textBlocklblVersion" Grid.Row="1" Grid.Column="0" Text="Version:" />
+                    <TextBlock Name="textBlockVersion" Grid.Row="1" Grid.Column="1" Text="1.0.0" />
+                    <TextBlock Name="textBlocklblMail" Grid.Row="2" Grid.Column="0" Text="Mail:" />
+                    <HyperlinkButton Name="hyperlinkMail" Grid.Row="2" Grid.Column="1" Content="frappa.a@gmail.com" NavigateUri="mailto:frappa.a@gmail.com" TargetName="_blank"/>
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>

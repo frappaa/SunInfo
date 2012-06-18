@@ -76,10 +76,10 @@
             <TextBlock Name="textBlockDec" Grid.Row="9" Grid.Column="1" />
             <TextBlock Name="textBlocklblLocSource" Grid.Row="10" Grid.Column="0" Text="Location Source:" />
             <TextBlock Name="textBlockLocSource" Grid.Row="10" Grid.Column="1" />
-            <TextBlock Name="textBlocklblLat" Grid.Row="11" Grid.Column="0" Text="Latitude:" />
-            <TextBlock Name="textBlockLat" Grid.Row="11" Grid.Column="1" />
-            <TextBlock Name="textBlocklblLon" Grid.Row="12" Grid.Column="0" Text="Latitude:" />
-            <TextBlock Name="textBlockLon" Grid.Row="12" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLon" Grid.Row="11" Grid.Column="0" Text="Longitude:" />
+            <TextBlock Name="textBlockLon" Grid.Row="11" Grid.Column="1" />
+            <TextBlock Name="textBlocklblLat" Grid.Row="12" Grid.Column="0" Text="Latitude:" />
+            <TextBlock Name="textBlockLat" Grid.Row="12" Grid.Column="1" />
             <TextBlock Name="textBlocklblHourAngle" Grid.Row="13" Grid.Column="0" Text="Hour Angle:" />
             <TextBlock Name="textBlockHourAngle" Grid.Row="13" Grid.Column="1" />
             <TextBlock Name="textBlocklblAz" Grid.Row="14" Grid.Column="0" Text="Azimuth:" />

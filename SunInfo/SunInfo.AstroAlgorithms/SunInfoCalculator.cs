@@ -80,7 +80,12 @@ namespace SunInfo.AstroAlgorithms
 
         private Degree MeanSunLongitude
         {
-            get { return new Degree(280.460 + .9856474 * DaysFrom2000); }
+            get
+            {
+                double degrees = 280.460 + .9856474 * DaysFrom2000;
+                int dividedBy360 = (int) (degrees / 360);
+                return new Degree(degrees - dividedBy360 * 360);
+            }
         }
 
         private Degree EclipticSunLongitude
@@ -94,7 +99,12 @@ namespace SunInfo.AstroAlgorithms
 
         private Degree MeanSunAnomaly
         {
-            get { return new Degree(357.5291 + .98560028 * DaysFrom2000); }
+            get
+            {
+                double degrees = 357.5291 + .98560028 * DaysFrom2000;
+                int dividedBy360 = (int)(degrees / 360);
+                return new Degree(degrees - dividedBy360 * 360);
+            }
         }
 
         private Degree EquationOfCenter
