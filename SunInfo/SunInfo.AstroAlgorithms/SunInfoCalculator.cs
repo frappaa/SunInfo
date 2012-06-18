@@ -187,7 +187,14 @@ namespace SunInfo.AstroAlgorithms
 
         public Radian RightAscension
         {
-            get { return new Radian(Math.Atan(Math.Cos(AxialTilt.ToRadian().Value) * Math.Tan(EclipticSunLongitude.ToRadian().Value))); }
+            get
+            {
+                Degree eclipticSunLongitude = EclipticSunLongitude;
+                int times90 = (int) (eclipticSunLongitude.Value/90);
+                double radian = Math.Atan(Math.Cos(AxialTilt.ToRadian().Value)*Math.Tan(eclipticSunLongitude.ToRadian().Value));
+                double negative = radian < 0 ? 1 : 0;
+                return new Radian(radian + (Math.PI/2)*times90 + (Math.PI/2)*negative);
+            }
         }
 
         public Radian Declination
