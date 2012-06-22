@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace SunInfo.AstroAlgorithms
 {
+    [DataContract]
     public class Degree
     {
         private readonly double _degree;
