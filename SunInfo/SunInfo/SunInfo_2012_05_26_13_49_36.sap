@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProfilerSession Type="ExecutionPerformanceAnalysis" Name="SunInfo634736369763973076">
+  <TargetApplication Name="SunInfo" SourceProject="SunInfo.csproj" Type="WindowsPhone71">
+    <ApplicationBinary Path="Bin\Debug\SunInfo.xap" Timestamp="19/05/2012 09:45:23" />
+    <ApplicationIconPath Path="" />
+    <SymbolPaths>
+      <Path Value="Bin\Debug\" />
+    </SymbolPaths>
+  </TargetApplication>
+  <Settings>
+    <Probe Name="Visual">
+      <CollectElementLevelCosting Enabled="True" />
+      <CollectSnapshots Enabled="False" Interval="" Resampling="" />
+      <CollectMediaEvents Enabled="False" />
+      <CollectCacheDetails Enabled="False" />
+    </Probe>
+    <Probe Name="Code">
+      <SampleCallStack Enabled="True" Depth="4294967295" Interval="10" />
+      <CollectPerformanceCounters Enabled="False" />
+    </Probe>
+    <Probe Name="Memory">
+      <MemoryCallStack Enabled="False" Depth="4294967295" />
+      <ObjectTree Enabled="False" Interval="10" />
+    </Probe>
+  </Settings>
+  <Data>
+    <Logs>
+      <File Type="NativeFormat" Path="PerformanceLogs\SunInfo634736369763973076\tmp1B2.tmp" />
+    </Logs>
+  </Data>
+  <TargetDeviceSettings OSVersion="7.10.7720" AvailablePhysicalMemoryAtStartup="375107584" ProcessorArchitectureType="Intel" ProcessorInformation="X86" IsEmulator="True" />
+</ProfilerSession>
