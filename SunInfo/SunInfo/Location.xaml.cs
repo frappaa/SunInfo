@@ -2,8 +2,10 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Xna.Framework.GamerServices;
 using SunInfo.AstroAlgorithms;
 
 namespace SunInfo
@@ -21,6 +23,7 @@ namespace SunInfo
         private short? _lonDeg = null;
         private short? _lonMin = null;
         private short? _lonSec = null;
+
 
         public Location()
         {
@@ -63,6 +66,12 @@ namespace SunInfo
             EnableControls();
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            TryParseLatLon();
+        }
+
         private void OnCancel(object sender, EventArgs e)
         {
             NavigationService.GoBack();
@@ -70,48 +79,66 @@ namespace SunInfo
 
         private void OnCheck(object sender, EventArgs e)
         {
-            PhoneApplicationService.Current.State[StateKeys.UseGps] = _useGps;
+            
             if (_useGps.HasValue && !_useGps.Value)
             {
-                string globalMessage = String.Empty;
-                string message;
-                TryParseLatDeg(out message);
-                globalMessage = globalMessage + message;
-                TryParseLatMin(out message);
-                globalMessage = globalMessage + message;
-                TryParseLatSec(out message);
-                globalMessage = globalMessage + message;
-                TryParseLonDeg(out message);
-                globalMessage = globalMessage + message;
-                TryParseLonMin(out message);
-                globalMessage = globalMessage + message;
-                TryParseLonSec(out message);
-                globalMessage = globalMessage + message;
-                if (!String.IsNullOrEmpty(globalMessage))
+                if (!TryParseLatLon())
                 {
-                    MessageBox.Show(globalMessage);
+                    return;
                 }
-                else
+                if (_latDeg.HasValue && _latMin.HasValue && _latSec.HasValue)
                 {
-                    if (_latDeg.HasValue && _latMin.HasValue && _latSec.HasValue)
-                    {
-                        var neg = (short) (pickerLatEmisph.SelectedIndex == 0 ? 1 : -1);
-                        _latitude = new Degree((short) (_latDeg.Value*neg), (short) (_latMin.Value*neg),
-                                               _latSec.Value*neg);
-                    }
+                    var neg = (short) (pickerLatEmisph.SelectedIndex == 0 ? 1 : -1);
+                    _latitude = new Degree((short) (_latDeg.Value*neg), (short) (_latMin.Value*neg),
+                                           _latSec.Value*neg);
+                }
 
-                    if (_lonDeg.HasValue && _lonMin.HasValue && _lonSec.HasValue)
-                    {
-                        var neg = (short) (pickerLonEmisph.SelectedIndex == 0 ? 1 : -1);
-                        _longitude = new Degree((short) (_lonDeg.Value*neg), (short) (_lonMin.Value*neg),
-                                                _lonSec.Value*neg);
-                    }
+                if (_lonDeg.HasValue && _lonMin.HasValue && _lonSec.HasValue)
+                {
+                    var neg = (short) (pickerLonEmisph.SelectedIndex == 0 ? 1 : -1);
+                    _longitude = new Degree((short) (_lonDeg.Value*neg), (short) (_lonMin.Value*neg),
+                                            _lonSec.Value*neg);
                 }
+                PhoneApplicationService.Current.State[StateKeys.CurrLatitude] = _latitude;
+                PhoneApplicationService.Current.State[StateKeys.CurrLongitude] = _longitude;
             }
-
-            PhoneApplicationService.Current.State[StateKeys.CurrLatitude] = _latitude;
-            PhoneApplicationService.Current.State[StateKeys.CurrLongitude] = _longitude;
+            PhoneApplicationService.Current.State[StateKeys.UseGps] = _useGps;
             NavigationService.GoBack();
+        }
+
+        private bool TryParseLatLon()
+        {
+            string globalMessage = String.Empty;
+            string message;
+            TryParseLatDeg(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            TryParseLatMin(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            TryParseLatSec(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            TryParseLonDeg(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            TryParseLonMin(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            TryParseLonSec(out message);
+            globalMessage = AddMessage(message, globalMessage);
+            if (!String.IsNullOrEmpty(globalMessage))
+            {
+                //Guide.BeginShowMessageBox(" ", globalMessage, new[] { "ok" }, 0, MessageBoxIcon.Error, new AsyncCallback(OnMessageBoxAction), null);
+                
+                Dispatcher.BeginInvoke(() => MessageBox.Show(globalMessage));
+                return false;
+            }
+            return true;
+        }
+
+        private static string AddMessage(string message, string globalMessage)
+        {
+            if (!String.IsNullOrEmpty(message))
+            {
+                globalMessage = string.Format("{0} {1}", globalMessage, message);
+            }
+            return globalMessage;
         }
 
         private void OnUseGpsChecked(object sender, RoutedEventArgs args)
@@ -138,8 +165,9 @@ namespace SunInfo
             EnableControls();
         }
 
-        private static void OnLostFocus(TextBox textBox, ParseMethod parseMethod)
+        private void OnLostFocus(TextBox textBox, ParseMethod parseMethod)
         {
+            return;
             if (String.IsNullOrEmpty(textBox.Text))
             {
                 return;
@@ -149,8 +177,16 @@ namespace SunInfo
             {
                 return;
             }
-            MessageBox.Show(message);
-            textBox.Focus();
+            //Guide.BeginShowMessageBox(" ", message, new[] { "ok" }, 0, MessageBoxIcon.Error, new AsyncCallback(OnMessageBoxAction), null);
+            Dispatcher.BeginInvoke(() =>
+                MessageBox.Show(message)
+                //textBox.Focus();
+            );
+        }
+
+        private void OnMessageBoxAction(IAsyncResult ar)
+        {
+            Guide.EndShowMessageBox(ar);
         }
 
         private delegate bool ParseMethod(out string message);
@@ -328,7 +364,5 @@ namespace SunInfo
             }
             return parsed;
         }
-
-
     }
 }
